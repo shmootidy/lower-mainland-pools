@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { DateTime } from 'luxon'
 import './App.css'
-import useVancouverAPI from './Hooks/useVancouverAPI'
+import useGetVancouverPoolCalendars from './APIs/useGetVancouverPoolCalendars'
+import useGetThisWeeksPoolTimes from './Hooks/useGetThisWeeksPoolTimes'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    filteredPoolTimes,
+    filteredPoolTimesLoading,
+    filteredPoolTimesError,
+  } = useGetThisWeeksPoolTimes()
+  console.log(
+    filteredPoolTimes,
+    filteredPoolTimesLoading,
+    filteredPoolTimesError
+  )
+  // const parkIds = data.map((d) => d.parkid)
+  // console.log(parkIds)
 
-  useVancouverAPI()
   return (
     <>
-      <div>
-        <a href='https://vite.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
+      {filteredPoolTimesLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div>
+          {filteredPoolTimes.map((pool) => {
+            return (
+              <div key={pool.center_id}>
+                <div>{pool.center_name}</div>
+                {pool.events.map((e, i) => {
+                  return (
+                    <div key={`${e.event_item_id}-${i}`}>
+                      <div>{e.title}</div>
+                      <div>{`${e.start_time} - ${e.end_time}`}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </>
   )
 }
