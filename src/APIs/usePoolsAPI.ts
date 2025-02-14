@@ -13,6 +13,7 @@ interface Pool {
   name: string
   notes: string | null
   url: string | null
+  center_id: number
 }
 
 export function useGetPools() {

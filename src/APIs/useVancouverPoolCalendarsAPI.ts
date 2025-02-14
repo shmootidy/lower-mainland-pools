@@ -22,7 +22,7 @@ export interface VancouverPoolCalendar {
 
 export function useGetVancouverPoolCalendars() {
   async function getVancouverPoolCalendars() {
-    const res = await fetch(`${VERCEL_URL}/proxy`)
+    const res = await fetch(`${VERCEL_URL}/getPoolSchedules`)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -43,5 +43,34 @@ export function useGetVancouverPoolCalendars() {
     poolCalendars,
     poolCalendarsLoading,
     poolCalendarsError,
+  }
+}
+
+export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
+  async function getVancouverPoolCalendars() {
+    const res = await fetch(
+      `${VERCEL_URL}/getPoolScheduleByCentreID?centreID=${centreID}`
+    )
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    return res.json()
+  }
+
+  const {
+    data: poolCalendar = [],
+    isLoading: poolCalendarLoading,
+    isError: poolCalendarError,
+  } = useQuery<VancouverPoolCalendar[]>({
+    ...DEFAULT_COMMON_API_CONFIG,
+    queryKey: ['poolCalendar'],
+    queryFn: getVancouverPoolCalendars,
+    enabled: !!centreID,
+  })
+
+  return {
+    poolCalendar,
+    poolCalendarLoading,
+    poolCalendarError,
   }
 }
