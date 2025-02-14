@@ -8,7 +8,7 @@ interface Pool {
   address: string | null
   coordinates: { x: number; y: number } | null
   created_date: Date
-  features: string | null
+  amenities: string[] | null
   locker_type: string | null
   name: string
   notes: string | null
