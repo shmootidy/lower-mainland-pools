@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import VERCEL_URL from '../utils/apiUrls'
 
 interface Pool {
   id: number
@@ -19,7 +20,7 @@ export function useGetPools() {
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(`http://localhost:3001/api/getPools`)
+    fetch(`${VERCEL_URL}/getPools`)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false)
@@ -49,7 +50,7 @@ export function useGetPoolsByID(poolIDs: number[]) {
     setIsLoading(true)
 
     if (poolIDs.length) {
-      fetch(`http://localhost:3001/api/getPoolsByID?poolIDs=${poolIDs}`)
+      fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false)

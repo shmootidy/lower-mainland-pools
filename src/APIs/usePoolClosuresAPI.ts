@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import VERCEL_URL from '../utils/apiUrls'
 
 interface PoolClosure {
   id: number
@@ -17,7 +18,7 @@ export function useGetPoolClosures() {
   useEffect(() => {
     setIsLoading(true)
 
-    fetch(`http://localhost:3001/api/getPoolClosures`)
+    fetch(`${VERCEL_URL}/getPoolClosures`)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false)

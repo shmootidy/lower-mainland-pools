@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import VERCEL_URL from '../utils/apiUrls'
 
 interface PoolEvent {
   activity_detail_url: string
@@ -28,12 +29,10 @@ export default function useGetVancouverPoolCalendars() {
 
   useEffect(() => {
     setIsLoading(true)
-    // need the real proxy from vercel!
-    fetch(`http://localhost:3001/api/proxy`)
+    fetch(`${VERCEL_URL}/proxy`)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false)
-        // console.log(data)
         setPoolCalendars(data.body.center_events)
       })
       .catch((err) => {

@@ -22,8 +22,7 @@ export default function useVancouverAPI() {
     fetch(
       // 'https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks/records?limit=100'
       // `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/community-centres/records?limit=100`
-      // `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks-facilities/records?limit=100&where=facilitytype='Swimming Pools'`
-      `http://localhost:3001/api/proxy`
+      `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks-facilities/records?limit=100&where=facilitytype='Swimming Pools'`
     )
       .then((res) => res.json())
       .then((data) => {
