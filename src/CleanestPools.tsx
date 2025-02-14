@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import styled from '@emotion/styled'
 
-import useGetPoolsAndClosures from './APIs/useGetPoolsAndClosures'
+import useGetPoolsAndClosures from './Hooks/useGetPoolsAndClosures'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()

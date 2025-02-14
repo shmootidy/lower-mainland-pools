@@ -1,5 +1,5 @@
-import { useGetPoolClosures } from './usePoolClosuresAPI'
-import { useGetPools } from './usePoolsAPI'
+import { useGetPoolClosures } from '../APIs/usePoolClosuresAPI'
+import { useGetPools } from '../APIs/usePoolsAPI'
 
 interface PoolsAndClosures {
   poolName: string
