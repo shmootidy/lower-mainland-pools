@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import VERCEL_URL from '../utils/apiUrls'
 
 interface PoolEvent {
@@ -20,31 +20,26 @@ export interface VancouverPoolCalendar {
 }
 
 export function useGetVancouverPoolCalendars() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  async function getVancouverPoolCalendars() {
+    const res = await fetch(`${VERCEL_URL}/proxy`)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    return res.json()
+  }
 
-  const [poolCalendars, setPoolCalendars] = useState<VancouverPoolCalendar[]>(
-    []
-  )
-
-  useEffect(() => {
-    setIsLoading(true)
-    fetch(`${VERCEL_URL}/proxy`)
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLoading(false)
-        setPoolCalendars(data.body.center_events)
-      })
-      .catch((err) => {
-        console.error('nope!', err)
-        setIsLoading(false)
-        setHasError(true)
-      })
-  }, [])
+  const {
+    data: poolCalendars = [],
+    isLoading: poolCalendarsLoading,
+    isError: poolCalendarsError,
+  } = useQuery<VancouverPoolCalendar[]>({
+    queryKey: ['poolCalendars'],
+    queryFn: getVancouverPoolCalendars,
+  })
 
   return {
     poolCalendars,
-    poolCalendarsLoading: isLoading,
-    poolCalendarsError: hasError,
+    poolCalendarsLoading,
+    poolCalendarsError,
   }
 }

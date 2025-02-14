@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
 import VERCEL_URL from '../utils/apiUrls'
 
 interface Pool {
@@ -14,59 +15,53 @@ interface Pool {
 }
 
 export function useGetPools() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [pools, setPools] = useState<Pool[]>([])
+  async function getPools() {
+    const res = await fetch(`${VERCEL_URL}/getPools`)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    return res.json()
+  }
 
-  useEffect(() => {
-    setIsLoading(true)
-    fetch(`${VERCEL_URL}/getPools`)
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLoading(false)
-        setPools(data)
-      })
-      .catch((err) => {
-        console.log('error!', err)
-        setIsLoading(false)
-        setHasError(true)
-      })
-  }, [])
+  const {
+    data: pools = [],
+    isLoading: poolsLoading,
+    isError: poolsError,
+  } = useQuery<Pool[]>({
+    queryKey: ['pools'],
+    queryFn: getPools,
+  })
 
   return {
     pools,
-    poolsLoading: isLoading,
-    poolsError: hasError,
+    poolsLoading,
+    poolsError,
   }
 }
 
 // note: i had to useMemo the ids in the call from a component to keep this from overflowing
+// but that before react-query; maybe it'll be smoother now
 export function useGetPoolsByID(poolIDs: number[]) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [poolsByID, setPoolsByID] = useState<Pool[]>([])
-
-  useEffect(() => {
-    setIsLoading(true)
-
-    if (poolIDs.length) {
-      fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setIsLoading(false)
-          setPoolsByID(data)
-        })
-        .catch((err) => {
-          console.log('error!', err)
-          setIsLoading(false)
-          setHasError(true)
-        })
+  async function getPoolsByID() {
+    const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
     }
-  }, [poolIDs])
+    return res.json()
+  }
+
+  const {
+    data: poolsByID = [],
+    isLoading: poolsByIDLoading,
+    isError: poolsByIDError,
+  } = useQuery<Pool[]>({
+    queryKey: [`poolIDs:${poolIDs}`],
+    queryFn: getPoolsByID,
+  })
 
   return {
     poolsByID,
-    poolsByIDLoading: isLoading,
-    poolsByIDError: hasError,
+    poolsByIDLoading,
+    poolsByIDError,
   }
 }
