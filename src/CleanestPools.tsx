@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import styled from '@emotion/styled'
 
 import useGetPoolsAndClosures from './APIs/useGetPoolsAndClosures'
 
@@ -6,44 +7,53 @@ export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
 
   const today = DateTime.now()
-  const oneYearAgo = today.minus({ year: 1 }).toISODate()
-  return (
+
+  if (hasError) {
+    return <div>Something went wrong.</div>
+  }
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}>
-      <ul>
-        {data.map((d, i) => {
-          const closureString = getClosureString(
-            d.closureEndDate,
-            oneYearAgo,
-            today
-          )
-          return (
-            <li key={i}>
-              <div>
-                {`${d.poolName} ${closureString}`}
-                {d.reasonForClosure ? `(${d.reasonForClosure})` : ''}
-              </div>
-            </li>
-          )
-        })}
-      </ul>
+      <table style={{ textAlign: 'left' }}>
+        <thead>
+          <tr>
+            <TableHeader>Pool</TableHeader>
+            <TableHeader>Is Open</TableHeader>
+            <TableHeader>Last closed</TableHeader>
+            <TableHeader>Reason for closure</TableHeader>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((d, i) => {
+            const closureEndDate = d.closureEndDate
+              ? DateTime.fromISO(d.closureEndDate)
+              : null
+            const diff = closureEndDate
+              ? today.diff(closureEndDate, ['days']).toObject().days
+              : null
+            const isCurrentlyClosed = !!(diff && diff < 0)
+
+            return (
+              <tr key={i}>
+                <TableData>{d.poolName}</TableData>
+                <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
+                <TableData>{d.closureEndDate}</TableData>
+                <TableData>{d.reasonForClosure}</TableData>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   )
 }
 
-function getClosureString(
-  closureEndString: string,
-  oneYearAgo: string,
-  today: DateTime
-) {
-  const isDummyData = oneYearAgo === closureEndString
-  if (isDummyData) {
-    return ''
-  }
-  const closureEndDate = DateTime.fromISO(closureEndString)
-  const diff = today.diff(closureEndDate, ['days']).toObject().days
-  const isCurrentlyClosed = diff && diff < 0
-  if (isCurrentlyClosed) {
-    return `will reopen ${closureEndString}`
-  }
-  return `reopened ${closureEndString}`
-}
+const TableHeader = styled.th`
+  padding-bottom: 16px;
+  padding-right: 16px;
+`
+const TableData = styled.td`
+  padding-bottom: 16px;
+  padding-right: 16px;
+`
