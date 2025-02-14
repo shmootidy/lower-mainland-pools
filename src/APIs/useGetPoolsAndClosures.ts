@@ -4,7 +4,7 @@ import { useGetPools } from './usePoolsAPI'
 
 interface PoolsAndClosures {
   poolName: string
-  closureEndDate: Date | string
+  closureEndDate: string
   reasonForClosure: string
 }
 

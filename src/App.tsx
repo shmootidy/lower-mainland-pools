@@ -4,6 +4,7 @@ import { useGetPoolsByID } from './APIs/usePoolsAPI'
 import './App.css'
 import useGetThisWeeksPoolTimes from './Hooks/useGetThisWeeksPoolTimes'
 import useGetPoolsAndClosures from './APIs/useGetPoolsAndClosures'
+import CleanestPools from './CleanestPools'
 
 function App() {
   // const {
@@ -11,6 +12,7 @@ function App() {
   //   filteredPoolTimesLoading,
   //   filteredPoolTimesError,
   // } = useGetThisWeeksPoolTimes()
+  // console.log(filteredPoolTimes)
   // const { poolClosures, poolClosuresLoading, poolClosuresError } =
   //   useGetPoolClosures()
 
@@ -27,7 +29,7 @@ function App() {
   console.log(data, isLoading, hasError)
   return (
     <>
-      <div>hi</div>
+      <CleanestPools />
       {/* {filteredPoolTimesLoading ? (
         <div>Loading...</div>
       ) : (
