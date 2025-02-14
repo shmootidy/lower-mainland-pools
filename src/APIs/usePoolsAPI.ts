@@ -8,7 +8,7 @@ interface Pool {
   address: string | null
   coordinates: { x: number; y: number } | null
   created_date: Date
-  amenities: string[] | null
+  amenities: string[]
   locker_type: string | null
   name: string
   notes: string | null
@@ -41,8 +41,6 @@ export function useGetPools() {
   }
 }
 
-// note: i had to useMemo the ids in the call from a component to keep this from overflowing
-// but that before react-query; maybe it'll be smoother now
 export function useGetPoolsByID(poolIDs: number[]) {
   async function getPoolsByID() {
     const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
@@ -59,6 +57,7 @@ export function useGetPoolsByID(poolIDs: number[]) {
   } = useQuery<Pool[]>({
     queryKey: [`poolIDs:${poolIDs}`],
     queryFn: getPoolsByID,
+    enabled: !!poolIDs.length,
   })
 
   return {

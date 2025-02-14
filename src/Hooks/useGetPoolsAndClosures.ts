@@ -5,6 +5,7 @@ interface PoolsAndClosures {
   poolName: string
   closureEndDate: string | null
   reasonForClosure: string | null
+  link: string
 }
 
 export default function useGetPoolsAndClosures() {
@@ -21,6 +22,7 @@ export default function useGetPoolsAndClosures() {
       reasonForClosure: getClosureDataMessage(
         poolClosureData?.reason_for_closure ?? null
       ),
+      link: `${pool.id}`,
     }
   })
 

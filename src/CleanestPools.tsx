@@ -36,7 +36,9 @@ export default function CleanestPools() {
 
             return (
               <tr key={i}>
-                <TableData>{d.poolName}</TableData>
+                <TableData>
+                  <a href={`pool?poolID=${d.link}`}>{d.poolName}</a>
+                </TableData>
                 <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
                 <TableData>{getReopenDate(d.closureEndDate)}</TableData>
                 <TableData>{d.reasonForClosure}</TableData>
