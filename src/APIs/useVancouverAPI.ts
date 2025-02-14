@@ -9,12 +9,13 @@ import { useEffect, useState } from 'react'
 // in the calendar data, when pool is closed it's event_type 0 -- means nothing...
 // this data has "facility_id"
 
+// not in use right now
 export default function useVancouverAPI() {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [data, setData] = useState<any>([])
+  const [dataa, setData] = useState<any>([])
 
   useEffect(() => {
     setIsLoading(true)
@@ -38,7 +39,7 @@ export default function useVancouverAPI() {
   }, [])
 
   return {
-    data,
+    dataa,
     isLoading,
     hasError,
   }

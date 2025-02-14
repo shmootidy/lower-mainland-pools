@@ -28,6 +28,7 @@ export default function useGetVancouverPoolCalendars() {
 
   useEffect(() => {
     setIsLoading(true)
+    // need the real proxy from vercel!
     fetch(`http://localhost:3001/api/proxy`)
       .then((res) => res.json())
       .then((data) => {

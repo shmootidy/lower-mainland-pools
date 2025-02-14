@@ -1,25 +1,34 @@
-import { DateTime } from 'luxon'
+import { useMemo } from 'react'
+import { useGetPoolClosures } from './APIs/usePoolClosuresAPI'
+import { useGetPoolsByID } from './APIs/usePoolsAPI'
 import './App.css'
-import useGetVancouverPoolCalendars from './APIs/useGetVancouverPoolCalendars'
 import useGetThisWeeksPoolTimes from './Hooks/useGetThisWeeksPoolTimes'
+import useGetPoolsAndClosures from './APIs/useGetPoolsAndClosures'
 
 function App() {
-  const {
-    filteredPoolTimes,
-    filteredPoolTimesLoading,
-    filteredPoolTimesError,
-  } = useGetThisWeeksPoolTimes()
-  console.log(
-    filteredPoolTimes,
-    filteredPoolTimesLoading,
-    filteredPoolTimesError
-  )
-  // const parkIds = data.map((d) => d.parkid)
-  // console.log(parkIds)
+  // const {
+  //   filteredPoolTimes,
+  //   filteredPoolTimesLoading,
+  //   filteredPoolTimesError,
+  // } = useGetThisWeeksPoolTimes()
+  // const { poolClosures, poolClosuresLoading, poolClosuresError } =
+  //   useGetPoolClosures()
 
+  // console.log(poolClosures, poolClosuresLoading ? 'Loading...' : '')
+
+  // const poolIDs = useMemo(
+  //   () => poolClosures.map((p) => p.pool_id),
+  //   [poolClosures]
+  // )
+  // const { poolsByID, poolsByIDLoading, poolsByIDError } =
+  //   useGetPoolsByID(poolIDs)
+  // console.log(poolsByID, poolsByIDLoading ? 'Loading...' : '')
+  const { data, isLoading, hasError } = useGetPoolsAndClosures()
+  console.log(data, isLoading, hasError)
   return (
     <>
-      {filteredPoolTimesLoading ? (
+      <div>hi</div>
+      {/* {filteredPoolTimesLoading ? (
         <div>Loading...</div>
       ) : (
         <div>
@@ -39,7 +48,7 @@ function App() {
             )
           })}
         </div>
-      )}
+      )} */}
     </>
   )
 }

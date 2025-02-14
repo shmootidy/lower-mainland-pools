@@ -21,6 +21,7 @@ export default function useGetThisWeeksPoolTimes() {
   const filteredPoolTimes = poolCalendars.map((pool) => {
     return {
       ...pool,
+      center_name: stripPoolNameOfAsterisk(pool.center_name),
       events: pool.events
         .filter((e) => {
           const diffStartFromNow = DateTime.fromSQL(e.start_time)
@@ -54,4 +55,11 @@ export default function useGetThisWeeksPoolTimes() {
     filteredPoolTimesLoading: poolCalendarsLoading,
     filteredPoolTimesError: poolCalendarsError,
   }
+}
+
+function stripPoolNameOfAsterisk(poolName: string) {
+  if (poolName[0] === '*') {
+    return poolName.slice(1, poolName.length)
+  }
+  return poolName
 }
