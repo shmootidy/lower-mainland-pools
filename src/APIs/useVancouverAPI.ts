@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 
-// ok AMAZING
-// i can query opendata soft for all pools
-// and then use the proxy to get the schedules for each pool
-// i can add a note about when a pool is scheduled for maintenance and reopening, and then store that somewhere for my own reference
-//
-
-// in the calendar data, when pool is closed it's event_type 0 -- means nothing...
-// this data has "facility_id"
+// the opendatasoft datasets don't have the data i'm after
+// parks are parks, not community centres
+// not all of the swimming pools have associated community centres
+// and not all of the parks-facilities have the pools i'm after
+// the most reliable way of getting the pools and their data is through the schedule endpoint
 
 // not in use right now
 export default function useVancouverAPI() {
@@ -22,7 +19,8 @@ export default function useVancouverAPI() {
     fetch(
       // 'https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks/records?limit=100'
       // `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/community-centres/records?limit=100`
-      `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks-facilities/records?limit=100&where=facilitytype='Swimming Pools'`
+      // `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks-facilities/records?limit=100&where=facilitytype='Swimming Pools'`
+      ''
     )
       .then((res) => res.json())
       .then((data) => {
