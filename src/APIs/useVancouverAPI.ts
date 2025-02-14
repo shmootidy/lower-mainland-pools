@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 // the opendatasoft datasets don't have the data i'm after
 // parks are parks, not community centres
@@ -7,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 // the most reliable way of getting the pools and their data is through the schedule endpoint
 
 // not in use right now
-export default function useGetVancouverDatasetRecords() {
+export function useGetVancouverDatasetRecords() {
   async function getVancouverDatasetRecords() {
     const res = await fetch(
       // 'https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/parks/records?limit=100'
@@ -22,6 +23,8 @@ export default function useGetVancouverDatasetRecords() {
   }
 
   const { data, isLoading, isError } = useQuery({
+    ...DEFAULT_COMMON_API_CONFIG,
+
     queryKey: ['vancouverDataset'],
     queryFn: getVancouverDatasetRecords,
   })

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import VERCEL_URL from '../utils/apiUrls'
+import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 interface PoolClosure {
   id: number
@@ -25,6 +26,7 @@ export function useGetPoolClosures() {
     isLoading: poolClosuresLoading,
     isError: poolClosuresError,
   } = useQuery<PoolClosure[]>({
+    ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolClosures'],
     queryFn: getPoolClosures,
   })
