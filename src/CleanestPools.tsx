@@ -20,7 +20,7 @@ export default function CleanestPools() {
           <tr>
             <TableHeader>Pool</TableHeader>
             <TableHeader>Is Open</TableHeader>
-            <TableHeader>Last closed</TableHeader>
+            <TableHeader>Reopen Date</TableHeader>
             <TableHeader>Reason for closure</TableHeader>
           </tr>
         </thead>
@@ -38,7 +38,7 @@ export default function CleanestPools() {
               <tr key={i}>
                 <TableData>{d.poolName}</TableData>
                 <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
-                <TableData>{d.closureEndDate}</TableData>
+                <TableData>{getReopenDate(d.closureEndDate)}</TableData>
                 <TableData>{d.reasonForClosure}</TableData>
               </tr>
             )
@@ -47,6 +47,13 @@ export default function CleanestPools() {
       </table>
     </div>
   )
+}
+
+function getReopenDate(closureEndDate: string | null) {
+  if (!closureEndDate) {
+    return null
+  }
+  return DateTime.fromISO(closureEndDate).plus({ days: 1 }).toISODate()
 }
 
 const TableHeader = styled.th`
