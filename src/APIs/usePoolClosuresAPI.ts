@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
 import VERCEL_URL from '../utils/apiUrls'
+import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 interface PoolClosure {
   id: number
@@ -11,29 +13,27 @@ interface PoolClosure {
 }
 
 export function useGetPoolClosures() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [poolClosures, setPoolClosures] = useState<PoolClosure[]>([])
+  async function getPoolClosures() {
+    const res = await fetch(`${VERCEL_URL}/getPoolClosures`)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    return res.json()
+  }
 
-  useEffect(() => {
-    setIsLoading(true)
-
-    fetch(`${VERCEL_URL}/getPoolClosures`)
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLoading(false)
-        setPoolClosures(data)
-      })
-      .catch((err) => {
-        console.log('error!', err)
-        setIsLoading(false)
-        setHasError(true)
-      })
-  }, [])
+  const {
+    data: poolClosures = [],
+    isLoading: poolClosuresLoading,
+    isError: poolClosuresError,
+  } = useQuery<PoolClosure[]>({
+    ...DEFAULT_COMMON_API_CONFIG,
+    queryKey: ['poolClosures'],
+    queryFn: getPoolClosures,
+  })
 
   return {
     poolClosures,
-    poolClosuresLoading: isLoading,
-    poolClosuresError: hasError,
+    poolClosuresLoading,
+    poolClosuresError,
   }
 }

@@ -2,11 +2,7 @@ import './App.css'
 import CleanestPools from './CleanestPools'
 
 function App() {
-  return (
-    <>
-      <CleanestPools />
-    </>
-  )
+  return <CleanestPools />
 }
 
 export default App
