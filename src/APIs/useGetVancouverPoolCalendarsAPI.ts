@@ -19,7 +19,7 @@ export interface VancouverPoolCalendar {
   events: PoolEvent[]
 }
 
-export default function useGetVancouverPoolCalendars() {
+export function useGetVancouverPoolCalendars() {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
