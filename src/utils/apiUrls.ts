@@ -1,5 +1,6 @@
 /**
  * Make sure vercel is running locally if using local url
+ * from within vercel-vancouver-pools-proxy, run:
  * vercel dev --listen 3001
  */
 // const VERCEL_URL = 'http://localhost:3001/api'
