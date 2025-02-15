@@ -139,8 +139,3 @@ export default function Pool() {
     </StateManager>
   )
 }
-
-/**
- * by default, i want to open the page to my favourite categories, which are hardcoded
- * but i want to be able to view all and set new filters
- */
