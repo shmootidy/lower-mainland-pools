@@ -3,16 +3,17 @@ import { useQuery } from '@tanstack/react-query'
 import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
-interface Pool {
+export interface Pool {
   id: number
   address: string | null
   coordinates: { x: number; y: number } | null
   created_date: Date
-  features: string | null
+  amenities: string[]
   locker_type: string | null
   name: string
   notes: string | null
   url: string | null
+  center_id: number
 }
 
 export function useGetPools() {
@@ -41,8 +42,6 @@ export function useGetPools() {
   }
 }
 
-// note: i had to useMemo the ids in the call from a component to keep this from overflowing
-// but that before react-query; maybe it'll be smoother now
 export function useGetPoolsByID(poolIDs: number[]) {
   async function getPoolsByID() {
     const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
@@ -59,6 +58,7 @@ export function useGetPoolsByID(poolIDs: number[]) {
   } = useQuery<Pool[]>({
     queryKey: [`poolIDs:${poolIDs}`],
     queryFn: getPoolsByID,
+    enabled: !!poolIDs.length,
   })
 
   return {
