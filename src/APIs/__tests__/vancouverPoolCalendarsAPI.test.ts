@@ -4,8 +4,7 @@ import {
   useGetVancouverPoolCalendars,
 } from '../vancouverPoolCalendarsAPI'
 import { wrapper } from '../../testUtils'
-import { expect } from 'vitest'
-import { poolCalendars } from '../../testData'
+import { mockPoolCalendars } from '../../testData'
 
 describe('vancouverPoolCalendarsAPI', () => {
   describe('useGetVancouverPoolCalendars', () => {
@@ -18,7 +17,7 @@ describe('vancouverPoolCalendarsAPI', () => {
         expect(result.current.poolCalendarsLoading).toBeFalsy()
       )
 
-      expect(result.current.poolCalendars).toEqual(poolCalendars)
+      expect(result.current.poolCalendars).toEqual(mockPoolCalendars)
     })
   })
 
@@ -35,7 +34,7 @@ describe('vancouverPoolCalendarsAPI', () => {
         expect(result.current.poolCalendarLoading).toBeFalsy()
       )
 
-      expect(result.current.poolCalendar).toEqual(poolCalendars[0])
+      expect(result.current.poolCalendar).toEqual(mockPoolCalendars[0])
     })
   })
 })

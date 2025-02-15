@@ -1,7 +1,7 @@
 import { wrapper } from '../../testUtils'
 import { renderHook, waitFor } from '@testing-library/react'
 import { useGetPools, useGetPoolsByID } from '../poolsAPI'
-import { poolsData } from '../../testData'
+import { mockPools } from '../../testData'
 
 describe('poolsAPI', () => {
   describe('useGetPools', () => {
@@ -10,7 +10,7 @@ describe('poolsAPI', () => {
 
       await waitFor(() => expect(result.current.poolsLoading).toBeFalsy())
 
-      expect(result.current.pools).toEqual(poolsData)
+      expect(result.current.pools).toEqual(mockPools)
     })
   })
 
@@ -20,7 +20,7 @@ describe('poolsAPI', () => {
 
       await waitFor(() => expect(result.current.poolsByIDLoading).toBeFalsy())
 
-      expect(result.current.poolsByID).toEqual(poolsData)
+      expect(result.current.poolsByID).toEqual(mockPools)
     })
   })
 })
