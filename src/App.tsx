@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import CleanestPools from './Components/CleanestPools'
-import Pool from './Components/Pool'
+import CleanestPools from './Views/CleanestPools'
+import Pool from './Views/Pool'
 
 const router = createBrowserRouter([
   {
