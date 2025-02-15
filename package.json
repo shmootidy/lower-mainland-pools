@@ -11,8 +11,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test": "vitest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -45,6 +45,7 @@ export default function useGetPoolsAndClosures() {
       ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
       : false
 
+    // will pool retain its "reason for closure" if it's open?
     return {
       poolName: pool?.name ?? 'name not found',
       nextPoolOpenDate: getNextPoolOpenDate(

@@ -25,7 +25,8 @@ interface IconAndColorMap {
 
 export function getPoolStatusIcon(
   poolLastCleanedDate: string | null,
-  reasonForClosure: ReasonForClosure
+  reasonForClosure: ReasonForClosure,
+  now: DateTime<boolean>
 ) {
   if (!poolLastCleanedDate) {
     return ICON_AND_COLOR_MAP['unknown']
@@ -35,11 +36,11 @@ export function getPoolStatusIcon(
     return ICON_AND_COLOR_MAP['mystery']
   }
 
-  const now = DateTime.now()
   const poolReopenDate = DateTime.fromSQL(poolLastCleanedDate)
-  const poolIsBeingCleaned = poolReopenDate.toMillis() > now.toMillis()
-  if (poolIsBeingCleaned) {
-    return ICON_AND_COLOR_MAP['active']
+  const poolIsBeingCleaned = poolReopenDate > now
+
+  if (reasonForClosure === 'annual maintenance' && poolIsBeingCleaned) {
+    return ICON_AND_COLOR_MAP['cleaning']
   }
 
   const monthsSinceCleaning = poolReopenDate
@@ -59,7 +60,7 @@ const ICON_AND_COLOR_MAP: IconAndColorMap = {
     icon: faHourglassHalf,
     color: '#fcfcfc33',
   },
-  active: {
+  cleaning: {
     icon: faSoap,
     color: '#2e3ae6',
   },

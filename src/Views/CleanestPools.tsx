@@ -9,10 +9,12 @@ import {
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
 import { TableData, TableHeader } from '../Components/StyledComponents'
+import { DateTime } from 'luxon'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
 
+  const now = DateTime.now()
   return (
     <StateManager
       isLoading={isLoading}
@@ -38,7 +40,8 @@ export default function CleanestPools() {
               {data.map((d, i) => {
                 const { icon, color } = getPoolStatusIcon(
                   d.lastClosedForCleaningReopenDate,
-                  d.reasonForClosure
+                  d.reasonForClosure,
+                  now
                 )
                 const openKey = d.isOpen ? 'open' : 'closed'
 
