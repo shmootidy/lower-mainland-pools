@@ -1,31 +1,31 @@
 import { DateTime } from 'luxon'
 import { PoolEvent } from '../APIs/useVancouverPoolCalendarsAPI'
 
+export const EVENT_CATEGORIES = [
+  'Free Swim',
+  'Lengths',
+  'Length Swim',
+  'Public Swim',
+  'Sauna',
+  'Whirlpool',
+  'Leisure Lane',
+]
+
 export function getFilteredPoolEventsForToday(
   poolEvents: PoolEvent[],
-  filterEventCategories: boolean
+  filteredEventCategories: string[]
 ) {
   const now = DateTime.now()
-
-  const eventCategories = [
-    'Free Swim',
-    'Lengths',
-    'Length Swim',
-    'Public Swim',
-    'Sauna',
-    'Whirlpool',
-    'Leisure Lane',
-  ]
 
   const filteredEvents = poolEvents
     .filter((e) => {
       const isToday = DateTime.fromSQL(e.start_time).hasSame(now, 'day')
 
-      const eventIsValid = eventCategories.some((cat) => {
+      const eventIsValid = filteredEventCategories.some((cat) => {
         return e.title.includes(cat)
       })
 
-      if (filterEventCategories) {
+      if (filteredEventCategories.length) {
         return eventIsValid && isToday
       }
       return isToday

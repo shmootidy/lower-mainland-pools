@@ -6,9 +6,10 @@ import {
   useGetVancouverPoolCalendars,
 } from '../APIs/useVancouverPoolCalendarsAPI'
 import {
+  EVENT_CATEGORIES,
   getFilteredPoolEventsForToday,
   getFirstEventTomorrow,
-} from '../utils/poolTimesUtils'
+} from '../utils/poolsUtils'
 
 interface PoolsAndClosures {
   poolName: string
@@ -41,7 +42,7 @@ export default function useGetPoolsAndClosures() {
   const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
     const pool = poolsGroupedByCentreID[c.center_id]
     const poolClosure = poolClosuresGroupedByPoolID[pool.id]
-    const filteredEvents = getFilteredPoolEventsForToday(c.events, false)
+    const filteredEvents = getFilteredPoolEventsForToday(c.events, [])
     const lastEvent = filteredEvents[filteredEvents.length - 1]
     const lastEventClosingTime = lastEvent.end
     const isPoolClosedForCleaning = poolClosure?.closure_end_date
