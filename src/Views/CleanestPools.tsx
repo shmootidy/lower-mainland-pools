@@ -1,4 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom'
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
 import useGetPoolsAndClosures from '../Hooks/useGetPoolsAndClosures'
 import {
@@ -6,7 +8,6 @@ import {
   OPEN_CLOSED_ICON_MAP,
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { TableData, TableHeader } from '../Components/StyledComponents'
 
 export default function CleanestPools() {
@@ -47,7 +48,7 @@ export default function CleanestPools() {
                       <FontAwesomeIcon style={{ color }} icon={icon} />
                     </TableData>
                     <TableData>
-                      <a href={`pool?poolID=${d.link}`}>{d.poolName}</a>
+                      <Link to={`pool?poolID=${d.link}`}>{d.poolName}</Link>
                     </TableData>
                     <TableData>
                       <FontAwesomeIcon
@@ -59,7 +60,11 @@ export default function CleanestPools() {
                     </TableData>
                     <TableData>{d.closureEndDate}</TableData>
                     <TableData>
-                      <a href={d.poolUrl} target='_blank'>
+                      <a
+                        href={d.poolUrl}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                       </a>
                     </TableData>

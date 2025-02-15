@@ -1,9 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import CleanestPools from './Views/CleanestPools'
 import Pool from './Views/Pool'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <CleanestPools />,
