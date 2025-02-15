@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import CleanestPools from './CleanestPools'
-import { useGetPoolsByID } from '../APIs/usePoolsAPI'
+import { useGetPoolsByID } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from '../APIs/useVancouverPoolCalendarsAPI'
 import {
   EVENT_CATEGORIES,

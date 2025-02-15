@@ -1,19 +1,23 @@
 import { setupServer } from 'msw/node'
 import { http, HttpResponse } from 'msw'
 import VERCEL_URL from './utils/apiUrls'
+import { poolClosuresData, poolsData } from './testData'
 
 const handlers = [
   http.get(`${VERCEL_URL}/getPoolClosures`, () => {
-    return HttpResponse.json([
-      {
-        id: 1,
-        pool_id: 10,
-        reason_for_closure: null,
-        event_id: 123,
-        created_at: '2025-01-01',
-        closure_end_date: '2025-03-01',
-      },
-    ])
+    return HttpResponse.json(poolClosuresData)
+  }),
+  http.get(`${VERCEL_URL}/getPools`, () => {
+    return HttpResponse.json(poolsData)
+  }),
+  http.get(`${VERCEL_URL}/getPoolsByID`, ({ request }) => {
+    const url = new URL(request.url)
+    const poolIDs = url.searchParams.get('poolIDs')
+
+    if (!poolIDs) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    return HttpResponse.json(poolsData)
   }),
 ]
 
