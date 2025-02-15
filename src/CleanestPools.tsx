@@ -58,11 +58,11 @@ function getReopenDate(closureEndDate: string | null) {
   return DateTime.fromISO(closureEndDate).plus({ days: 1 }).toISODate()
 }
 
-const TableHeader = styled.th`
+export const TableHeader = styled.th`
   padding-bottom: 16px;
   padding-right: 16px;
 `
-const TableData = styled.td`
+export const TableData = styled.td`
   padding-bottom: 16px;
   padding-right: 16px;
 `

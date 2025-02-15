@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
-interface PoolEvent {
+export interface PoolEvent {
   activity_detail_url: string
   end_time: string
   price: {
@@ -58,10 +58,10 @@ export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
   }
 
   const {
-    data: poolCalendar = [],
+    data: poolCalendar = null,
     isLoading: poolCalendarLoading,
     isError: poolCalendarError,
-  } = useQuery<VancouverPoolCalendar[]>({
+  } = useQuery<VancouverPoolCalendar>({
     ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolCalendar'],
     queryFn: getVancouverPoolCalendars,
