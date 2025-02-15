@@ -2,7 +2,7 @@
   "name": "lower-mainland-pools",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://shmootidy.github.io/lower-mainland-pools/",
+  "homepage": "https://shmootidy.github.io/lower-mainland-pools",
   "type": "module",
   "scripts": {
     "dev": "vite",
