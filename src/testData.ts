@@ -1,4 +1,8 @@
-export const poolClosuresData = [
+import { PoolClosure } from './APIs/poolClosuresAPI'
+import { Pool } from './APIs/poolsAPI'
+import { VancouverPoolCalendar } from './APIs/vancouverPoolCalendarsAPI'
+
+export const poolClosuresData: PoolClosure[] = [
   {
     id: 1,
     pool_id: 10,
@@ -9,7 +13,7 @@ export const poolClosuresData = [
   },
 ]
 
-export const poolsData = [
+export const poolsData: Pool[] = [
   {
     id: 1,
     address: null,
@@ -21,5 +25,25 @@ export const poolsData = [
     notes: null,
     url: null,
     center_id: 12,
+  },
+]
+
+export const poolCalendars: VancouverPoolCalendar[] = [
+  {
+    center_id: 12,
+    center_name: 'Pool 1',
+    total: 1,
+    events: [
+      {
+        activity_detail_url: '',
+        end_time: '2025-01-01T12:00:00',
+        price: {
+          estimate_price: '',
+        },
+        start_time: '2024-01-01T11:00:00',
+        title: 'Test event',
+        event_item_id: 1,
+      },
+    ],
   },
 ]
