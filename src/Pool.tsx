@@ -5,6 +5,7 @@ import CleanestPools, { TableData, TableHeader } from './CleanestPools'
 import { useGetPoolsByID } from './APIs/usePoolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from './APIs/useVancouverPoolCalendarsAPI'
 import { filteredPoolEvents } from './utils/poolTimesUtils'
+import { DateTime } from 'luxon'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -38,6 +39,8 @@ export default function Pool() {
     poolCalendar?.events ?? [],
     isFilterEventCategories
   )
+  const now = DateTime.now().toMillis()
+
   return (
     <div>
       <a href='/'>back</a>
@@ -52,9 +55,7 @@ export default function Pool() {
       <h2 style={{ margin: 0 }}>Today's schedule</h2>
       <div style={{ fontSize: 10 }}>
         <button onClick={() => setIsFilterEventCategories((prev) => !prev)}>
-          {isFilterEventCategories
-            ? 'Show all events'
-            : 'Hide lessons and other things'}
+          {`Show ${isFilterEventCategories ? 'all' : 'filtered'} events`}
         </button>
       </div>
       <table>
@@ -63,6 +64,7 @@ export default function Pool() {
             <TableHeader>Event</TableHeader>
             <TableHeader>Start</TableHeader>
             <TableHeader>End</TableHeader>
+            <TableHeader>Now</TableHeader>
           </tr>
         </thead>
         <tbody>
@@ -72,11 +74,17 @@ export default function Pool() {
             </tr>
           ) : (
             filteredEvents?.map((e, i) => {
+              const start = DateTime.fromSQL(e.start_time)
+              const end = DateTime.fromSQL(e.end_time)
+              const isNow = now > start.toMillis() && now < end.toMillis()
               return (
                 <tr key={i} style={{ color: e.hasFinished ? 'grey' : 'white' }}>
                   <TableData>{e.title}</TableData>
-                  <TableData>{e.start_time}</TableData>
-                  <TableData>{e.end_time}</TableData>
+                  <TableData>{start.toFormat('t')}</TableData>
+                  <TableData>{end.toFormat('t')}</TableData>
+                  <TableData style={{ textAlign: 'center' }}>
+                    {isNow ? '---' : '|'}
+                  </TableData>
                 </tr>
               )
             })
