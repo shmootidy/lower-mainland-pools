@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { PoolEvent } from '../APIs/useVancouverPoolCalendarsAPI'
 
-export function filteredPoolEvents(
+export function getFilteredPoolEventsForToday(
   poolEvents: PoolEvent[],
   filterEventCategories: boolean
 ) {
@@ -53,4 +53,20 @@ export function filteredPoolEvents(
     })
 
   return filteredEvents
+}
+
+export function getFirstEventTomorrow(poolEvents: PoolEvent[]) {
+  const tomorrow = DateTime.now().plus({ days: 1 })
+
+  const firstEventTomorrow = poolEvents
+    .filter((e) => {
+      const isTomorrow = DateTime.fromSQL(e.start_time).hasSame(tomorrow, 'day')
+      return isTomorrow
+    })
+    .sort((a, b) => {
+      const aDate = DateTime.fromSQL(a.start_time).toMillis()
+      const bDate = DateTime.fromSQL(b.start_time).toMillis()
+      return aDate - bDate
+    })[0]
+  return firstEventTomorrow
 }

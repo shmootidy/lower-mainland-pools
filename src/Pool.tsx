@@ -4,7 +4,7 @@ import { useState } from 'react'
 import CleanestPools, { TableData, TableHeader } from './CleanestPools'
 import { useGetPoolsByID } from './APIs/usePoolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from './APIs/useVancouverPoolCalendarsAPI'
-import { filteredPoolEvents } from './utils/poolTimesUtils'
+import { getFilteredPoolEventsForToday } from './utils/poolTimesUtils'
 import { DateTime } from 'luxon'
 
 export default function Pool() {
@@ -22,7 +22,6 @@ export default function Pool() {
   if (!poolID) {
     return (
       <>
-        <h2>Select a pool to view details</h2>
         <CleanestPools />
       </>
     )
@@ -35,7 +34,7 @@ export default function Pool() {
     return <div>something went horribly wrong</div>
   }
 
-  const filteredEvents = filteredPoolEvents(
+  const filteredEvents = getFilteredPoolEventsForToday(
     poolCalendar?.events ?? [],
     isFilterEventCategories
   )

@@ -14,40 +14,47 @@ export default function CleanestPools() {
   return isLoading ? (
     <div>Loading...</div>
   ) : (
-    <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}>
-      <table style={{ textAlign: 'left' }}>
-        <thead>
-          <tr>
-            <TableHeader>Pool</TableHeader>
-            <TableHeader>Is Open</TableHeader>
-            <TableHeader>Reopen Date</TableHeader>
-            <TableHeader>Reason for closure</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d, i) => {
-            const closureEndDate = d.closureEndDate
-              ? DateTime.fromISO(d.closureEndDate)
-              : null
-            const diff = closureEndDate
-              ? today.diff(closureEndDate, ['days']).toObject().days
-              : null
-            const isCurrentlyClosed = !!(diff && diff < 0)
+    <>
+      <h2>Select a pool to view details</h2>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}
+      >
+        <table style={{ textAlign: 'left' }}>
+          <thead>
+            <tr>
+              <TableHeader>Clean?</TableHeader>
+              <TableHeader>Pool</TableHeader>
+              <TableHeader>Open</TableHeader>
+              <TableHeader></TableHeader>
+              <TableHeader>Reopens</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((d, i) => {
+              const closureEndDate = d.closureEndDate
+                ? DateTime.fromISO(d.closureEndDate)
+                : null
+              const diff = closureEndDate
+                ? today.diff(closureEndDate, ['days']).toObject().days
+                : null
+              const isCurrentlyClosed = !!(diff && diff < 0)
 
-            return (
-              <tr key={i}>
-                <TableData>
-                  <a href={`pool?poolID=${d.link}`}>{d.poolName}</a>
-                </TableData>
-                <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
-                <TableData>{getReopenDate(d.closureEndDate)}</TableData>
-                <TableData>{d.reasonForClosure}</TableData>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+              return (
+                <tr key={i}>
+                  <TableData>?</TableData>
+                  <TableData>
+                    <a href={`pool?poolID=${d.link}`}>{d.poolName}</a>
+                  </TableData>
+                  <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
+                  <TableData>{d.reasonForClosure}</TableData>
+                  <TableData>{d.closureEndDate}</TableData>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
 

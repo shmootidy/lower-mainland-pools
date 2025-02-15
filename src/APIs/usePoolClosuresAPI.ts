@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
-interface PoolClosure {
+export interface PoolClosure {
   id: number
   pool_id: number
   reason_for_closure: string | null
