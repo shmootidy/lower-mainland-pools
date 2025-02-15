@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import useGetPoolsAndClosures from '../Hooks/useGetPoolsAndClosures'
 import {
-  getPoolCleanlinessIcon,
+  getPoolStatusIcon,
   OPEN_CLOSED_ICON_MAP,
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
@@ -31,7 +31,7 @@ export default function CleanestPools() {
                 <TableHeader></TableHeader>
                 <TableHeader>Pool</TableHeader>
                 <TableHeader>Open</TableHeader>
-                <TableHeader></TableHeader>
+                {/* <TableHeader></TableHeader> */}
                 <TableHeader>Reopens</TableHeader>
               </tr>
             </thead>
@@ -44,8 +44,9 @@ export default function CleanestPools() {
                   ? today.diff(closureEndDate, ['days']).toObject().days
                   : null
                 const isCurrentlyClosed = !!(diff && diff < 0)
-                const { icon, color } = getPoolCleanlinessIcon(
-                  d.lastClosedForCleaningReopenDate
+                const { icon, color } = getPoolStatusIcon(
+                  d.lastClosedForCleaningReopenDate,
+                  d.reasonForClosure
                 )
                 const openKey = isCurrentlyClosed ? 'closed' : 'open'
 
@@ -65,7 +66,7 @@ export default function CleanestPools() {
                         icon={OPEN_CLOSED_ICON_MAP[openKey].icon}
                       />
                     </TableData>
-                    <TableData>{d.reasonForClosure}</TableData>
+                    {/* <TableData>{d.reasonForClosure}</TableData> */}
                     <TableData>{d.closureEndDate}</TableData>
                   </tr>
                 )

@@ -1,5 +1,6 @@
 import {
   faCheck,
+  faDragon,
   faFaceFlushed,
   faFaceGrimace,
   faFaceGrinHearts,
@@ -21,9 +22,16 @@ interface IconAndColorMap {
   }
 }
 
-export function getPoolCleanlinessIcon(poolLastCleanedDate: string | null) {
+export function getPoolStatusIcon(
+  poolLastCleanedDate: string | null,
+  reasonForClosure: string | null
+) {
   if (!poolLastCleanedDate) {
     return ICON_AND_COLOR_MAP['unknown']
+  }
+
+  if (reasonForClosure && reasonForClosure !== 'annual maintenance') {
+    return ICON_AND_COLOR_MAP['mystery']
   }
   const now = DateTime.now()
 
@@ -82,6 +90,10 @@ const ICON_AND_COLOR_MAP: IconAndColorMap = {
   undefined: {
     icon: faGhost,
     color: '#fcfcfc',
+  },
+  mystery: {
+    icon: faDragon,
+    color: '#d93838',
   },
 }
 

@@ -60,9 +60,7 @@ export default function useGetPoolsAndClosures() {
         poolClosure?.closure_end_date
       ),
       lastClosedForCleaningReopenDate: poolClosure?.closure_end_date ?? null,
-      reasonForClosure: getReasonForClosureMessage(
-        poolClosure?.reason_for_closure
-      ),
+      reasonForClosure: poolClosure?.reason_for_closure ?? null,
       link: `${pool?.id}`,
       poolUrl: pool?.url ?? '',
       isOpen,
@@ -74,16 +72,6 @@ export default function useGetPoolsAndClosures() {
     hasError: poolClosuresError || poolCalendarsError || poolsError,
     data: poolsAndClosures,
   }
-}
-
-function getReasonForClosureMessage(reasonForClosure: string | null) {
-  if (!reasonForClosure) {
-    return null
-  }
-  if (reasonForClosure === 'annual maintenance') {
-    return reasonForClosure
-  }
-  return 'uncertain; check site'
 }
 
 function getClosureEndDate(
