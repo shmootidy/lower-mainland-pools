@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import CleanestPools from './CleanestPools'
@@ -81,7 +81,7 @@ export default function Pool() {
       noData={!poolsByID.length}
     >
       <div>
-        <a href='/'>back</a>
+        <Link to='/'>back</Link>
         <h1>{poolsByID[0]?.name}</h1>
         <h2>Amenities</h2>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
