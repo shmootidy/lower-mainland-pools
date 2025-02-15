@@ -11,13 +11,19 @@ export const EVENT_CATEGORIES = [
   'Leisure Lane',
 ]
 
+export interface FilteredEvent extends PoolEvent {
+  end: DateTime<boolean>
+  start: DateTime<boolean>
+  timeline: 'past' | 'present' | 'future'
+}
+
 export function getFilteredPoolEventsForToday(
   poolEvents: PoolEvent[],
   filteredEventCategories: string[]
 ) {
   const now = DateTime.now()
 
-  const filteredEvents = poolEvents
+  const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
       const isToday = DateTime.fromSQL(e.start_time).hasSame(now, 'day')
 

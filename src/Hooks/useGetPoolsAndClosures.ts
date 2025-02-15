@@ -53,6 +53,7 @@ export default function useGetPoolsAndClosures() {
       now > firstEventOpeningTime.toMillis() &&
       now < lastEventClosingTime.toMillis() &&
       !isPoolClosedForCleaning
+
     const nextEvent =
       now < firstEventOpeningTime.toMillis()
         ? firstEvent
