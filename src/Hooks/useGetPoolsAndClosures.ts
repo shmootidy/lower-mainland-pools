@@ -11,7 +11,6 @@ interface PoolsAndClosures {
 export default function useGetPoolsAndClosures() {
   const { poolClosures, poolClosuresLoading, poolClosuresError } =
     useGetPoolClosures()
-
   const { pools, poolsLoading, poolsError } = useGetPools()
 
   const poolsAndClosures: PoolsAndClosures[] = pools.map((pool) => {
