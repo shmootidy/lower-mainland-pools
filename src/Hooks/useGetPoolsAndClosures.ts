@@ -53,12 +53,15 @@ export default function useGetPoolsAndClosures() {
       now > firstEventOpeningTime.toMillis() &&
       now < lastEventClosingTime.toMillis() &&
       !isPoolClosedForCleaning
-    const firstEventTomorrow = getFirstEventTomorrow(c.events)
+    const nextEvent =
+      now < firstEventOpeningTime.toMillis()
+        ? firstEvent
+        : getFirstEventTomorrow(c.events)
 
     return {
       poolName: pool?.name ?? 'name not found',
       closureEndDate: getClosureEndDate(
-        firstEventTomorrow,
+        nextEvent,
         isPoolClosedForCleaning,
         poolClosure?.closure_end_date
       ),
