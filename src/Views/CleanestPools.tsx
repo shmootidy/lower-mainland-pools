@@ -58,7 +58,7 @@ export default function CleanestPools() {
                         icon={OPEN_CLOSED_ICON_MAP[openKey].icon}
                       />
                     </TableData>
-                    <TableData>{d.isOpen ? '' : d.closureEndDate}</TableData>
+                    <TableData>{d.isOpen ? '' : d.nextPoolOpenDate}</TableData>
                     <TableData>
                       <a
                         href={d.poolUrl}

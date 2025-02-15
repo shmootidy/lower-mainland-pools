@@ -14,6 +14,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { DateTime } from 'luxon'
+import { ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 
 interface IconAndColorMap {
   [key: string]: {
@@ -24,19 +25,18 @@ interface IconAndColorMap {
 
 export function getPoolStatusIcon(
   poolLastCleanedDate: string | null,
-  reasonForClosure: string | null
+  reasonForClosure: ReasonForClosure
 ) {
   if (!poolLastCleanedDate) {
     return ICON_AND_COLOR_MAP['unknown']
   }
 
-  if (reasonForClosure && reasonForClosure !== 'annual maintenance') {
+  if (reasonForClosure === 'unknown') {
     return ICON_AND_COLOR_MAP['mystery']
   }
+
   const now = DateTime.now()
-
   const poolReopenDate = DateTime.fromSQL(poolLastCleanedDate)
-
   const poolIsBeingCleaned = poolReopenDate.toMillis() > now.toMillis()
   if (poolIsBeingCleaned) {
     return ICON_AND_COLOR_MAP['active']

@@ -37,42 +37,59 @@ export function getFilteredPoolEventsForToday(
       return isToday
     })
     .map((e) => {
-      const end = DateTime.fromSQL(e.end_time)
-      const start = DateTime.fromSQL(e.start_time)
-      const timeline: 'past' | 'present' | 'future' =
-        now.toMillis() > start.toMillis() && now.toMillis() < end.toMillis()
-          ? 'present'
-          : now.toMillis() > start.toMillis()
-          ? 'past'
-          : 'future'
       return {
         ...e,
-        end,
-        start,
-        timeline,
+        ...getEventStartEndAndTimeline(e, now),
       }
     })
-    .sort((a, b) => {
-      const aDate = a.start.toMillis()
-      const bDate = b.start.toMillis()
-      return aDate - bDate
-    })
 
-  return filteredEvents
+  return sortFilteredPoolEvents(filteredEvents)
 }
 
 export function getFirstEventTomorrow(poolEvents: PoolEvent[]) {
-  const tomorrow = DateTime.now().plus({ days: 1 })
+  const now = DateTime.now()
+  const tomorrow = now.plus({ days: 1 })
 
-  const firstEventTomorrow = poolEvents
+  const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
       const isTomorrow = DateTime.fromSQL(e.start_time).hasSame(tomorrow, 'day')
       return isTomorrow
     })
-    .sort((a, b) => {
-      const aDate = DateTime.fromSQL(a.start_time).toMillis()
-      const bDate = DateTime.fromSQL(b.start_time).toMillis()
+    .map((e) => {
+      return {
+        ...e,
+        ...getEventStartEndAndTimeline(e, now),
+      }
+    })
+
+  return sortFilteredPoolEvents(filteredEvents)[0]
+}
+
+function getEventStartEndAndTimeline(
+  poolEvent: PoolEvent,
+  now: DateTime<boolean>
+) {
+  const end = DateTime.fromSQL(poolEvent.end_time)
+  const start = DateTime.fromSQL(poolEvent.start_time)
+  const timeline: 'past' | 'present' | 'future' =
+    now.toMillis() > start.toMillis() && now.toMillis() < end.toMillis()
+      ? 'present'
+      : now.toMillis() > start.toMillis()
+      ? 'past'
+      : 'future'
+  return { start, end, timeline }
+}
+
+function sortFilteredPoolEvents(
+  filteredEvents: FilteredEvent[],
+  order?: 'asc' | 'desc'
+) {
+  return filteredEvents.sort((a, b) => {
+    const aDate = a.start.toMillis()
+    const bDate = b.start.toMillis()
+    if (!order || order === 'asc') {
       return aDate - bDate
-    })[0]
-  return firstEventTomorrow
+    }
+    return bDate - aDate
+  })
 }

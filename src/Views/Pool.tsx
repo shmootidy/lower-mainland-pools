@@ -15,7 +15,7 @@ import { TableData, TableHeader } from '../Components/StyledComponents'
 export default function Pool() {
   const [searchParams] = useSearchParams()
   const poolID = searchParams.get('poolID')
-  // console.log(poolID)
+
   const [filteredEventCategories, setFilteredEventCategories] = useState<
     Omit<CheckboxProps, 'onToggleChecked'>[]
   >([])

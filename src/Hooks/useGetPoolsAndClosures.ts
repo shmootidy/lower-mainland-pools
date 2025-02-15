@@ -1,19 +1,18 @@
 import { DateTime } from 'luxon'
 import { PoolClosure, useGetPoolClosures } from '../APIs/usePoolClosuresAPI'
 import { Pool, useGetPools } from '../APIs/usePoolsAPI'
+import { useGetVancouverPoolCalendars } from '../APIs/useVancouverPoolCalendarsAPI'
 import {
-  PoolEvent,
-  useGetVancouverPoolCalendars,
-} from '../APIs/useVancouverPoolCalendarsAPI'
-import {
+  FilteredEvent,
   getFilteredPoolEventsForToday,
   getFirstEventTomorrow,
 } from '../utils/poolsUtils'
 
+export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
 interface PoolsAndClosures {
   poolName: string
-  closureEndDate: string | null
-  reasonForClosure: string | null
+  nextPoolOpenDate: string
+  reasonForClosure: ReasonForClosure
   link: string
   poolUrl: string
   lastClosedForCleaningReopenDate: string | null
@@ -41,36 +40,24 @@ export default function useGetPoolsAndClosures() {
   const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
     const pool = poolsGroupedByCentreID[c.center_id]
     const poolClosure = poolClosuresGroupedByPoolID[pool.id]
-    const filteredEvents = getFilteredPoolEventsForToday(c.events, [])
-    const firstEvent = filteredEvents[0]
-    const firstEventOpeningTime = firstEvent.start
-    const lastEvent = filteredEvents[filteredEvents.length - 1]
-    const lastEventClosingTime = lastEvent.end
+    const todaysEvents = getFilteredPoolEventsForToday(c.events, [])
     const isPoolClosedForCleaning = poolClosure?.closure_end_date
       ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
       : false
-    const isOpen =
-      now > firstEventOpeningTime.toMillis() &&
-      now < lastEventClosingTime.toMillis() &&
-      !isPoolClosedForCleaning
-
-    const nextEvent =
-      now < firstEventOpeningTime.toMillis()
-        ? firstEvent
-        : getFirstEventTomorrow(c.events)
 
     return {
       poolName: pool?.name ?? 'name not found',
-      closureEndDate: getClosureEndDate(
-        nextEvent,
-        isPoolClosedForCleaning,
-        poolClosure?.closure_end_date
+      nextPoolOpenDate: getNextPoolOpenDate(
+        todaysEvents,
+        getFirstEventTomorrow(c.events),
+        now,
+        poolClosure
       ),
       lastClosedForCleaningReopenDate: poolClosure?.closure_end_date ?? null,
-      reasonForClosure: poolClosure?.reason_for_closure ?? null,
+      reasonForClosure: getReasonForClosure(poolClosure?.reason_for_closure),
       link: `${pool?.id}`,
       poolUrl: pool?.url ?? '',
-      isOpen,
+      isOpen: isPoolOpenNow(todaysEvents, isPoolClosedForCleaning),
     }
   })
 
@@ -81,15 +68,54 @@ export default function useGetPoolsAndClosures() {
   }
 }
 
-function getClosureEndDate(
-  firstEventTomorrow: PoolEvent,
-  isPoolClosedForCleaning: boolean,
-  closureEndDate: string | null
+function getReasonForClosure(
+  reasonForClosure?: string | null
+): ReasonForClosure {
+  if (!reasonForClosure) {
+    return null
+  }
+  if (reasonForClosure === 'annual maintenance') {
+    return 'annual maintenance'
+  }
+  return 'unknown'
+}
+
+function isPoolOpenNow(
+  todaysEvents: FilteredEvent[],
+  isPoolClosedForCleaning: boolean
 ) {
   if (isPoolClosedForCleaning) {
+    return false
+  }
+  const currentEvent = todaysEvents.filter((e) => e.timeline === 'present')
+  if (currentEvent.every((e) => e.title.includes('Closure'))) {
+    return false
+  }
+  return !!currentEvent.length
+}
+
+function getNextPoolOpenDate(
+  todaysEvents: FilteredEvent[],
+  firstEventTomorrow: FilteredEvent,
+  now: number,
+  poolClosure?: PoolClosure
+): string {
+  const isPoolClosedForCleaning = poolClosure?.closure_end_date
+    ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
+    : false
+  if (isPoolClosedForCleaning) {
+    const closureEndDate = poolClosure?.closure_end_date
     return closureEndDate
-      ? DateTime.fromSQL(closureEndDate).plus({ days: 1 }).toISODate()
+      ? DateTime.fromSQL(closureEndDate).plus({ days: 1 }).toISODate() ??
+          'unknown'
       : 'unknown'
   }
-  return DateTime.fromSQL(firstEventTomorrow.start_time).toFormat('ccc d t')
+
+  const firstFutureEventToday = todaysEvents.find(
+    (e) => e.timeline === 'future'
+  )
+  if (firstFutureEventToday) {
+    return firstFutureEventToday.start.toFormat('ccc d t')
+  }
+  return firstEventTomorrow.start.toFormat('ccc d t')
 }
