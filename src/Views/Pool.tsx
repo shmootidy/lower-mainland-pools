@@ -11,6 +11,7 @@ import {
 import StateManager from '../Components/StateManager'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
 import { TableData, TableHeader } from '../Components/StyledComponents'
+import { DateTime } from 'luxon'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -28,14 +29,16 @@ export default function Pool() {
 
   useEffect(() => {
     if (!poolCalendarLoading) {
-      const filteredEvents2 = getFilteredPoolEventsForToday(
+      const now = DateTime.now()
+      const initialFilteredEvents = getFilteredPoolEventsForToday(
         poolCalendar?.events ?? [],
-        []
+        [],
+        now
       )
       setFilteredEventCategories(
         Array.from(
           new Set(
-            filteredEvents2.map((e) => {
+            initialFilteredEvents.map((e) => {
               const isChecked = EVENT_CATEGORIES.some((c) =>
                 e.title.includes(c)
               )
@@ -60,7 +63,8 @@ export default function Pool() {
 
   const filteredEvents = getFilteredPoolEventsForToday(
     poolCalendar?.events ?? [],
-    filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label)
+    filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label),
+    DateTime.now()
   )
 
   function handleToggleCheck(eventCategory: string) {

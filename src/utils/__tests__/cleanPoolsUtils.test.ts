@@ -17,7 +17,7 @@ describe('cleanPoolsUtils', () => {
       ).toEqual('hourglass-half')
     })
 
-    it('returns mystery icon when pool is ', () => {
+    it('returns mystery icon when pool has unknown closure status', () => {
       expect(
         getPoolStatusIcon(MOCK_CURRENT_DATE_STRING, 'unknown', mockNow).icon
           .iconName

@@ -35,14 +35,15 @@ export default function useGetPoolsAndClosures() {
     poolsGroupedByCentreID[p.center_id] = p
   })
 
-  const now = DateTime.now().toMillis()
+  const now = DateTime.now()
 
   const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
     const pool = poolsGroupedByCentreID[c.center_id]
     const poolClosure = poolClosuresGroupedByPoolID[pool.id]
-    const todaysEvents = getFilteredPoolEventsForToday(c.events, [])
+    const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
+
     const isPoolClosedForCleaning = poolClosure?.closure_end_date
-      ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
+      ? DateTime.fromSQL(poolClosure.closure_end_date) > now
       : false
 
     // will pool retain its "reason for closure" if it's open?
@@ -50,7 +51,7 @@ export default function useGetPoolsAndClosures() {
       poolName: pool?.name ?? 'name not found',
       nextPoolOpenDate: getNextPoolOpenDate(
         todaysEvents,
-        getFirstEventTomorrow(c.events),
+        getFirstEventTomorrow(c.events, now),
         now,
         poolClosure
       ),
@@ -98,11 +99,11 @@ function isPoolOpenNow(
 function getNextPoolOpenDate(
   todaysEvents: FilteredEvent[],
   firstEventTomorrow: FilteredEvent,
-  now: number,
+  now: DateTime<boolean>,
   poolClosure?: PoolClosure
 ): string {
   const isPoolClosedForCleaning = poolClosure?.closure_end_date
-    ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
+    ? DateTime.fromSQL(poolClosure.closure_end_date) > now
     : false
   if (isPoolClosedForCleaning) {
     const closureEndDate = poolClosure?.closure_end_date
