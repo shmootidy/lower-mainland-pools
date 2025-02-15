@@ -43,13 +43,9 @@ export function getPoolStatusIcon(
     return ICON_AND_COLOR_MAP['cleaning']
   }
 
-  const monthsSinceCleaning = poolReopenDate
-    .diff(now, 'months')
-    .toObject().months
+  const monthsSinceCleaning =
+    now.diff(poolReopenDate, 'months').toObject().months ?? 0
 
-  if (!monthsSinceCleaning) {
-    return ICON_AND_COLOR_MAP['undefined']
-  }
   const key = Math.ceil(monthsSinceCleaning / 2) * 2
 
   return ICON_AND_COLOR_MAP[`${key}`] ?? ICON_AND_COLOR_MAP['undefined']
