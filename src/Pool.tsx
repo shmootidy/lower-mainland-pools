@@ -74,14 +74,13 @@ export default function Pool() {
             </tr>
           ) : (
             filteredEvents?.map((e, i) => {
-              const start = DateTime.fromSQL(e.start_time)
-              const end = DateTime.fromSQL(e.end_time)
-              const isNow = now > start.toMillis() && now < end.toMillis()
+              const isNow = e.timeline === 'present'
+              const isPast = e.timeline === 'past'
               return (
-                <tr key={i} style={{ color: e.hasFinished ? 'grey' : 'white' }}>
+                <tr key={i} style={{ color: isPast ? 'grey' : 'white' }}>
                   <TableData>{e.title}</TableData>
-                  <TableData>{start.toFormat('t')}</TableData>
-                  <TableData>{end.toFormat('t')}</TableData>
+                  <TableData>{e.start.toFormat('t')}</TableData>
+                  <TableData>{e.end.toFormat('t')}</TableData>
                   <TableData style={{ textAlign: 'center' }}>
                     {isNow ? '---' : '|'}
                   </TableData>

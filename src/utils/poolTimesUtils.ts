@@ -5,7 +5,7 @@ export function filteredPoolEvents(
   poolEvents: PoolEvent[],
   filterEventCategories: boolean
 ) {
-  const now = DateTime.local()
+  const now = DateTime.now()
 
   const eventCategories = [
     'Free Swim',
@@ -31,15 +31,24 @@ export function filteredPoolEvents(
       return isToday
     })
     .map((e) => {
-      const hasFinished = DateTime.fromSQL(e.end_time) <= now
+      const end = DateTime.fromSQL(e.end_time)
+      const start = DateTime.fromSQL(e.start_time)
+      const timeline: 'past' | 'present' | 'future' =
+        now.toMillis() > start.toMillis() && now.toMillis() < end.toMillis()
+          ? 'present'
+          : now.toMillis() > start.toMillis()
+          ? 'past'
+          : 'future'
       return {
         ...e,
-        hasFinished,
+        end,
+        start,
+        timeline,
       }
     })
     .sort((a, b) => {
-      const aDate = DateTime.fromSQL(a.start_time).toMillis()
-      const bDate = DateTime.fromSQL(b.start_time).toMillis()
+      const aDate = a.start.toMillis()
+      const bDate = b.start.toMillis()
       return aDate - bDate
     })
 
