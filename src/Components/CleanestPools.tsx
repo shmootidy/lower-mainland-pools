@@ -2,11 +2,11 @@ import { DateTime } from 'luxon'
 import styled from '@emotion/styled'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import useGetPoolsAndClosures from './Hooks/useGetPoolsAndClosures'
+import useGetPoolsAndClosures from '../Hooks/useGetPoolsAndClosures'
 import {
   getPoolCleanlinessIcon,
   OPEN_CLOSED_ICON_MAP,
-} from './utils/cleanPoolsUtils'
+} from '../utils/cleanPoolsUtils'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()

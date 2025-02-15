@@ -2,10 +2,9 @@ import { useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 
 import CleanestPools, { TableData, TableHeader } from './CleanestPools'
-import { useGetPoolsByID } from './APIs/usePoolsAPI'
-import { useGetVancouverPoolCalendarByCentreID } from './APIs/useVancouverPoolCalendarsAPI'
-import { getFilteredPoolEventsForToday } from './utils/poolTimesUtils'
-import { DateTime } from 'luxon'
+import { useGetPoolsByID } from '../APIs/usePoolsAPI'
+import { useGetVancouverPoolCalendarByCentreID } from '../APIs/useVancouverPoolCalendarsAPI'
+import { getFilteredPoolEventsForToday } from '../utils/poolTimesUtils'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
