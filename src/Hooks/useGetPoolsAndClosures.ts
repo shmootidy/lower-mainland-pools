@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { PoolClosure, useGetPoolClosures } from '../APIs/usePoolClosuresAPI'
+import { PoolClosure, useGetPoolClosures } from '../APIs/poolClosuresAPI'
 import { Pool, useGetPools } from '../APIs/usePoolsAPI'
 import { useGetVancouverPoolCalendars } from '../APIs/useVancouverPoolCalendarsAPI'
 import {

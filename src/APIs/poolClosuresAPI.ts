@@ -8,7 +8,7 @@ export interface PoolClosure {
   pool_id: number
   reason_for_closure: string | null
   event_id: number
-  created_at: Date
+  created_at: string
   closure_end_date: string
 }
 
@@ -18,7 +18,8 @@ export function useGetPoolClosures() {
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
-    return res.json()
+    const json = await res.json()
+    return json // res.json()
   }
 
   const {
