@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import useGetPoolsAndClosures from '../Hooks/useGetPoolsAndClosures'
@@ -8,6 +7,7 @@ import {
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { TableData, TableHeader } from '../Components/StyledComponents'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
@@ -73,12 +73,3 @@ export default function CleanestPools() {
     </StateManager>
   )
 }
-
-export const TableHeader = styled.th`
-  padding-bottom: 16px;
-  padding-right: 16px;
-`
-export const TableData = styled.td`
-  padding-bottom: 16px;
-  padding-right: 16px;
-`

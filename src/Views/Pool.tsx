@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import CleanestPools, { TableData, TableHeader } from './CleanestPools'
+import CleanestPools from './CleanestPools'
 import { useGetPoolsByID } from '../APIs/usePoolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from '../APIs/useVancouverPoolCalendarsAPI'
 import {
@@ -10,6 +10,7 @@ import {
 } from '../utils/poolsUtils'
 import StateManager from '../Components/StateManager'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
+import { TableData, TableHeader } from '../Components/StyledComponents'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
