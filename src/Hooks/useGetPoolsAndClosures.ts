@@ -6,7 +6,6 @@ import {
   useGetVancouverPoolCalendars,
 } from '../APIs/useVancouverPoolCalendarsAPI'
 import {
-  EVENT_CATEGORIES,
   getFilteredPoolEventsForToday,
   getFirstEventTomorrow,
 } from '../utils/poolsUtils'
@@ -84,12 +83,5 @@ function getClosureEndDate(
       ? DateTime.fromSQL(closureEndDate).plus({ days: 1 }).toISODate()
       : 'unknown'
   }
-  return DateTime.fromSQL(firstEventTomorrow.start_time).toFormat('ff')
+  return DateTime.fromSQL(firstEventTomorrow.start_time).toFormat('ccc d t')
 }
-
-/**
- * name         open                                    reopens
- * Britannia    X       after hours                     tomorrow
- * Killarney    X       closed for annual maintenance   mar 14 2025
- * Byng         V       until 9:00pm                    tomorrow
- */

@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import styled from '@emotion/styled'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -8,11 +7,10 @@ import {
   OPEN_CLOSED_ICON_MAP,
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
-
-  const today = DateTime.now()
 
   return (
     <StateManager
@@ -31,24 +29,17 @@ export default function CleanestPools() {
                 <TableHeader></TableHeader>
                 <TableHeader>Pool</TableHeader>
                 <TableHeader>Open</TableHeader>
-                {/* <TableHeader></TableHeader> */}
                 <TableHeader>Reopens</TableHeader>
+                <TableHeader></TableHeader>
               </tr>
             </thead>
             <tbody>
               {data.map((d, i) => {
-                const closureEndDate = d.closureEndDate
-                  ? DateTime.fromISO(d.closureEndDate)
-                  : null
-                const diff = closureEndDate
-                  ? today.diff(closureEndDate, ['days']).toObject().days
-                  : null
-                const isCurrentlyClosed = !!(diff && diff < 0)
                 const { icon, color } = getPoolStatusIcon(
                   d.lastClosedForCleaningReopenDate,
                   d.reasonForClosure
                 )
-                const openKey = isCurrentlyClosed ? 'closed' : 'open'
+                const openKey = d.isOpen ? 'open' : 'closed'
 
                 return (
                   <tr key={i}>
@@ -66,8 +57,12 @@ export default function CleanestPools() {
                         icon={OPEN_CLOSED_ICON_MAP[openKey].icon}
                       />
                     </TableData>
-                    {/* <TableData>{d.reasonForClosure}</TableData> */}
                     <TableData>{d.closureEndDate}</TableData>
+                    <TableData>
+                      <a href={d.poolUrl} target='_blank'>
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                      </a>
+                    </TableData>
                   </tr>
                 )
               })}
