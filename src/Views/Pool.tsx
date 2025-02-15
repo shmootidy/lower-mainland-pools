@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import CleanestPools from './CleanestPools'
 import { useGetPoolsByID } from '../APIs/poolsAPI'
-import { useGetVancouverPoolCalendarByCentreID } from '../APIs/useVancouverPoolCalendarsAPI'
+import { useGetVancouverPoolCalendarByCentreID } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   EVENT_CATEGORIES,
   getFilteredPoolEventsForToday,

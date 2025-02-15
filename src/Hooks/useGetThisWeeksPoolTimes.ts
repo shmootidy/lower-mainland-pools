@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { useGetVancouverPoolCalendars } from '../APIs/useVancouverPoolCalendarsAPI'
+import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 
 export default function useGetThisWeeksPoolTimes() {
   const { poolCalendars, poolCalendarsLoading, poolCalendarsError } =

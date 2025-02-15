@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { PoolEvent } from '../APIs/useVancouverPoolCalendarsAPI'
+import { PoolEvent } from '../APIs/vancouverPoolCalendarsAPI'
 
 export const EVENT_CATEGORIES = [
   'Free Swim',

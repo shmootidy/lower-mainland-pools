@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { PoolClosure, useGetPoolClosures } from '../APIs/poolClosuresAPI'
 import { Pool, useGetPools } from '../APIs/poolsAPI'
-import { useGetVancouverPoolCalendars } from '../APIs/useVancouverPoolCalendarsAPI'
+import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   FilteredEvent,
   getFilteredPoolEventsForToday,
