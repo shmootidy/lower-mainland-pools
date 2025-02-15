@@ -42,13 +42,17 @@ export default function useGetPoolsAndClosures() {
     const pool = poolsGroupedByCentreID[c.center_id]
     const poolClosure = poolClosuresGroupedByPoolID[pool.id]
     const filteredEvents = getFilteredPoolEventsForToday(c.events, [])
+    const firstEvent = filteredEvents[0]
+    const firstEventOpeningTime = firstEvent.start
     const lastEvent = filteredEvents[filteredEvents.length - 1]
     const lastEventClosingTime = lastEvent.end
     const isPoolClosedForCleaning = poolClosure?.closure_end_date
       ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
       : false
     const isOpen =
-      now < lastEventClosingTime.toMillis() && !isPoolClosedForCleaning
+      now > firstEventOpeningTime.toMillis() &&
+      now < lastEventClosingTime.toMillis() &&
+      !isPoolClosedForCleaning
     const firstEventTomorrow = getFirstEventTomorrow(c.events)
 
     return {
