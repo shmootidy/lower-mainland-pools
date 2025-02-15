@@ -19,7 +19,3 @@ function App() {
 }
 
 export default App
-
-// faPersonSwimming
-// faPoop
-// faSoap

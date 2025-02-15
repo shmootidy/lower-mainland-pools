@@ -1,7 +1,12 @@
 import { DateTime } from 'luxon'
 import styled from '@emotion/styled'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import useGetPoolsAndClosures from './Hooks/useGetPoolsAndClosures'
+import {
+  getPoolCleanlinessIcon,
+  OPEN_CLOSED_ICON_MAP,
+} from './utils/cleanPoolsUtils'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
@@ -22,7 +27,7 @@ export default function CleanestPools() {
         <table style={{ textAlign: 'left' }}>
           <thead>
             <tr>
-              <TableHeader>Clean?</TableHeader>
+              <TableHeader></TableHeader>
               <TableHeader>Pool</TableHeader>
               <TableHeader>Open</TableHeader>
               <TableHeader></TableHeader>
@@ -38,14 +43,27 @@ export default function CleanestPools() {
                 ? today.diff(closureEndDate, ['days']).toObject().days
                 : null
               const isCurrentlyClosed = !!(diff && diff < 0)
+              const { icon, color } = getPoolCleanlinessIcon(
+                d.lastClosedForCleaningReopenDate
+              )
+              const openKey = isCurrentlyClosed ? 'closed' : 'open'
 
               return (
                 <tr key={i}>
-                  <TableData>?</TableData>
+                  <TableData>
+                    <FontAwesomeIcon style={{ color }} icon={icon} />
+                  </TableData>
                   <TableData>
                     <a href={`pool?poolID=${d.link}`}>{d.poolName}</a>
                   </TableData>
-                  <TableData>{isCurrentlyClosed ? '❌' : '✅'}</TableData>
+                  <TableData>
+                    <FontAwesomeIcon
+                      style={{
+                        color: OPEN_CLOSED_ICON_MAP[openKey].color,
+                      }}
+                      icon={OPEN_CLOSED_ICON_MAP[openKey].icon}
+                    />
+                  </TableData>
                   <TableData>{d.reasonForClosure}</TableData>
                   <TableData>{d.closureEndDate}</TableData>
                 </tr>
@@ -56,13 +74,6 @@ export default function CleanestPools() {
       </div>
     </>
   )
-}
-
-function getReopenDate(closureEndDate: string | null) {
-  if (!closureEndDate) {
-    return null
-  }
-  return DateTime.fromISO(closureEndDate).plus({ days: 1 }).toISODate()
 }
 
 export const TableHeader = styled.th`

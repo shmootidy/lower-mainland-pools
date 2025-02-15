@@ -5,21 +5,31 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #312f2f;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --white: #fcfcfc;
+
+  /* these are just here for my reference */
+  --viz1: #d93838;
+  --viz2: #e06666;
+  --viz3: #f6b26a;
+  --viz4: #ffe599;
+  --viz5: #92c47c;
+  --viz6: #5bc130;
+  --vlue: #2e3ae6;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--white);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--white);
 }
 
 body {

@@ -38,7 +38,6 @@ export default function Pool() {
     poolCalendar?.events ?? [],
     isFilterEventCategories
   )
-  const now = DateTime.now().toMillis()
 
   return (
     <div>
