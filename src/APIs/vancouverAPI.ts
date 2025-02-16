@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 // the opendatasoft datasets don't have the data i'm after

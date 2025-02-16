@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
@@ -11,7 +12,6 @@ import {
 import StateManager from '../Components/StateManager'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
 import { TableData, TableHeader } from '../Components/StyledComponents'
-import { DateTime } from 'luxon'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()

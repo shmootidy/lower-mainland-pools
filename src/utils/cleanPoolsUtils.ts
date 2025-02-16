@@ -14,6 +14,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { DateTime } from 'luxon'
+
 import { ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 
 interface IconAndColorMap {

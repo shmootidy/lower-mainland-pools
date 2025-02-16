@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
@@ -9,7 +10,6 @@ import {
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
 import { TableData, TableHeader } from '../Components/StyledComponents'
-import { DateTime } from 'luxon'
 
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()

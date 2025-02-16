@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { expect, describe, it } from 'vitest'
+
 import { getPoolStatusIcon } from '../cleanPoolsUtils'
 
 const MOCK_CURRENT_DATE_STRING = '2025-01-01'

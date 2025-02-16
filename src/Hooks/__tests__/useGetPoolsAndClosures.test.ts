@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
+import { vi } from 'vitest'
+
 import { renderHook, waitFor } from '@testing-library/react'
 import { wrapper } from '../../testUtils'
 import useGetPoolsAndClosures from '../useGetPoolsAndClosures'
-import { vi } from 'vitest'
 import { MOCK_CURRENT_DATE_TIME_STRING } from '../../testData'
 
 describe('useGetPoolsAndClosures', () => {

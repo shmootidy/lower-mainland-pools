@@ -1,5 +1,6 @@
-import { wrapper } from '../../testUtils'
 import { renderHook, waitFor } from '@testing-library/react'
+
+import { wrapper } from '../../testUtils'
 import { useGetPools, useGetPoolsByID } from '../poolsAPI'
 import { mockPools } from '../../testData'
 

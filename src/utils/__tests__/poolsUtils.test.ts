@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { expect, describe, it } from 'vitest'
+
 import {
   getFilteredPoolEventsForToday,
   getFirstEventTomorrow,
