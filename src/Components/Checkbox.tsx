@@ -8,7 +8,7 @@ export default function Checkbox(props: CheckboxProps) {
   const { isChecked, onToggleChecked, label } = props
 
   return (
-    <label>
+    <label data-testid='checkbox'>
       <input
         type='checkbox'
         checked={isChecked}

@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { PoolEvent } from '../APIs/useVancouverPoolCalendarsAPI'
+
+import { PoolEvent } from '../APIs/vancouverPoolCalendarsAPI'
 
 export const EVENT_CATEGORIES = [
   'Free Swim',
@@ -19,10 +20,9 @@ export interface FilteredEvent extends PoolEvent {
 
 export function getFilteredPoolEventsForToday(
   poolEvents: PoolEvent[],
-  filteredEventCategories: string[]
+  filteredEventCategories: string[],
+  now: DateTime<boolean>
 ) {
-  const now = DateTime.now()
-
   const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
       const isToday = DateTime.fromSQL(e.start_time).hasSame(now, 'day')
@@ -46,8 +46,10 @@ export function getFilteredPoolEventsForToday(
   return sortFilteredPoolEvents(filteredEvents)
 }
 
-export function getFirstEventTomorrow(poolEvents: PoolEvent[]) {
-  const now = DateTime.now()
+export function getFirstEventTomorrow(
+  poolEvents: PoolEvent[],
+  now: DateTime<boolean>
+) {
   const tomorrow = now.plus({ days: 1 })
 
   const filteredEvents: FilteredEvent[] = poolEvents
@@ -62,7 +64,9 @@ export function getFirstEventTomorrow(poolEvents: PoolEvent[]) {
       }
     })
 
-  return sortFilteredPoolEvents(filteredEvents)[0]
+  return filteredEvents.length
+    ? sortFilteredPoolEvents(filteredEvents)[0]
+    : null
 }
 
 function getEventStartEndAndTimeline(

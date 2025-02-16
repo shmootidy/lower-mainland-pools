@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +14,7 @@ import { TableData, TableHeader } from '../Components/StyledComponents'
 export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
 
+  const now = DateTime.now()
   return (
     <StateManager
       isLoading={isLoading}
@@ -38,7 +40,8 @@ export default function CleanestPools() {
               {data.map((d, i) => {
                 const { icon, color } = getPoolStatusIcon(
                   d.lastClosedForCleaningReopenDate,
-                  d.reasonForClosure
+                  d.reasonForClosure,
+                  now
                 )
                 const openKey = d.isOpen ? 'open' : 'closed'
 

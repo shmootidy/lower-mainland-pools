@@ -7,7 +7,7 @@ export interface Pool {
   id: number
   address: string | null
   coordinates: { x: number; y: number } | null
-  created_date: Date
+  created_date: string
   amenities: string[]
   locker_type: string | null
   name: string

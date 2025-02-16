@@ -1,9 +1,10 @@
+import { DateTime } from 'luxon'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import CleanestPools from './CleanestPools'
-import { useGetPoolsByID } from '../APIs/usePoolsAPI'
-import { useGetVancouverPoolCalendarByCentreID } from '../APIs/useVancouverPoolCalendarsAPI'
+import { useGetPoolsByID } from '../APIs/poolsAPI'
+import { useGetVancouverPoolCalendarByCentreID } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   EVENT_CATEGORIES,
   getFilteredPoolEventsForToday,
@@ -28,14 +29,16 @@ export default function Pool() {
 
   useEffect(() => {
     if (!poolCalendarLoading) {
-      const filteredEvents2 = getFilteredPoolEventsForToday(
+      const now = DateTime.now()
+      const initialFilteredEvents = getFilteredPoolEventsForToday(
         poolCalendar?.events ?? [],
-        []
+        [],
+        now
       )
       setFilteredEventCategories(
         Array.from(
           new Set(
-            filteredEvents2.map((e) => {
+            initialFilteredEvents.map((e) => {
               const isChecked = EVENT_CATEGORIES.some((c) =>
                 e.title.includes(c)
               )
@@ -60,7 +63,8 @@ export default function Pool() {
 
   const filteredEvents = getFilteredPoolEventsForToday(
     poolCalendar?.events ?? [],
-    filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label)
+    filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label),
+    DateTime.now()
   )
 
   function handleToggleCheck(eventCategory: string) {

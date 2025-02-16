@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { PoolClosure, useGetPoolClosures } from '../APIs/usePoolClosuresAPI'
-import { Pool, useGetPools } from '../APIs/usePoolsAPI'
-import { useGetVancouverPoolCalendars } from '../APIs/useVancouverPoolCalendarsAPI'
+
+import { PoolClosure, useGetPoolClosures } from '../APIs/poolClosuresAPI'
+import { Pool, useGetPools } from '../APIs/poolsAPI'
+import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   FilteredEvent,
   getFilteredPoolEventsForToday,
@@ -11,7 +12,7 @@ import {
 export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
 interface PoolsAndClosures {
   poolName: string
-  nextPoolOpenDate: string
+  nextPoolOpenDate: string | null
   reasonForClosure: ReasonForClosure
   link: string
   poolUrl: string
@@ -35,21 +36,23 @@ export default function useGetPoolsAndClosures() {
     poolsGroupedByCentreID[p.center_id] = p
   })
 
-  const now = DateTime.now().toMillis()
+  const now = DateTime.now()
 
   const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
     const pool = poolsGroupedByCentreID[c.center_id]
     const poolClosure = poolClosuresGroupedByPoolID[pool.id]
-    const todaysEvents = getFilteredPoolEventsForToday(c.events, [])
+    const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
+
     const isPoolClosedForCleaning = poolClosure?.closure_end_date
-      ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
+      ? DateTime.fromSQL(poolClosure.closure_end_date) > now
       : false
 
+    // will pool retain its "reason for closure" if it's open?
     return {
       poolName: pool?.name ?? 'name not found',
       nextPoolOpenDate: getNextPoolOpenDate(
         todaysEvents,
-        getFirstEventTomorrow(c.events),
+        getFirstEventTomorrow(c.events, now),
         now,
         poolClosure
       ),
@@ -96,12 +99,12 @@ function isPoolOpenNow(
 
 function getNextPoolOpenDate(
   todaysEvents: FilteredEvent[],
-  firstEventTomorrow: FilteredEvent,
-  now: number,
+  firstEventTomorrow: FilteredEvent | null,
+  now: DateTime<boolean>,
   poolClosure?: PoolClosure
-): string {
+): string | null {
   const isPoolClosedForCleaning = poolClosure?.closure_end_date
-    ? DateTime.fromSQL(poolClosure.closure_end_date).toMillis() > now
+    ? DateTime.fromSQL(poolClosure.closure_end_date) > now
     : false
   if (isPoolClosedForCleaning) {
     const closureEndDate = poolClosure?.closure_end_date
@@ -117,5 +120,8 @@ function getNextPoolOpenDate(
   if (firstFutureEventToday) {
     return firstFutureEventToday.start.toFormat('ccc d t')
   }
-  return firstEventTomorrow.start.toFormat('ccc d t')
+  if (firstEventTomorrow) {
+    return firstEventTomorrow.start.toFormat('ccc d t')
+  }
+  return null
 }
