@@ -12,10 +12,12 @@ export const EVENT_CATEGORIES = [
   'Leisure Lane',
 ]
 
+type EventTimeline = 'past' | 'present' | 'future'
+
 export interface FilteredEvent extends PoolEvent {
   end: DateTime<boolean>
   start: DateTime<boolean>
-  timeline: 'past' | 'present' | 'future'
+  timeline: EventTimeline
 }
 
 export function getFilteredPoolEventsForToday(
@@ -75,7 +77,7 @@ function getEventStartEndAndTimeline(
 ) {
   const end = DateTime.fromSQL(poolEvent.end_time)
   const start = DateTime.fromSQL(poolEvent.start_time)
-  const timeline: 'past' | 'present' | 'future' =
+  const timeline: EventTimeline =
     now.toMillis() > start.toMillis() && now.toMillis() < end.toMillis()
       ? 'present'
       : now.toMillis() > start.toMillis()
