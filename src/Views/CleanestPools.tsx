@@ -6,7 +6,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import useGetPoolsAndClosures from '../Hooks/useGetPoolsAndClosures'
 import {
   getPoolStatusIcon,
-  OPEN_CLOSED_ICON_MAP,
+  OPEN_STATUS_ICON_MAP,
 } from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
 import { TableData, TableHeader } from '../Components/StyledComponents'
@@ -15,6 +15,7 @@ export default function CleanestPools() {
   const { data, isLoading, hasError } = useGetPoolsAndClosures()
 
   const now = DateTime.now()
+
   return (
     <StateManager
       isLoading={isLoading}
@@ -43,7 +44,6 @@ export default function CleanestPools() {
                   d.reasonForClosure,
                   now
                 )
-                const openKey = d.isOpen ? 'open' : 'closed'
 
                 return (
                   <tr key={i}>
@@ -56,12 +56,14 @@ export default function CleanestPools() {
                     <TableData>
                       <FontAwesomeIcon
                         style={{
-                          color: OPEN_CLOSED_ICON_MAP[openKey].color,
+                          color: OPEN_STATUS_ICON_MAP[d.openStatus].color,
                         }}
-                        icon={OPEN_CLOSED_ICON_MAP[openKey].icon}
+                        icon={OPEN_STATUS_ICON_MAP[d.openStatus].icon}
                       />
                     </TableData>
-                    <TableData>{d.isOpen ? '' : d.nextPoolOpenDate}</TableData>
+                    <TableData>
+                      {d.openStatus === 'open' ? '' : d.nextPoolOpenDate}
+                    </TableData>
                     <TableData>
                       <a
                         href={d.poolUrl}

@@ -17,7 +17,7 @@ describe('useGetPoolsAndClosures', () => {
 
     expect(result.current.data).toEqual([
       {
-        isOpen: false,
+        openStatus: 'closed',
         lastClosedForCleaningReopenDate: '2025-03-01',
         poolID: 1,
         nextPoolOpenDate: '2025-03-02',
@@ -26,7 +26,7 @@ describe('useGetPoolsAndClosures', () => {
         reasonForClosure: 'annual maintenance',
       },
       {
-        isOpen: false,
+        openStatus: 'closed',
         lastClosedForCleaningReopenDate: null,
         poolID: 2,
         nextPoolOpenDate: null,
@@ -35,7 +35,7 @@ describe('useGetPoolsAndClosures', () => {
         reasonForClosure: 'unknown', // 'closed because of bears' becomes 'unknown'
       },
       {
-        isOpen: true,
+        openStatus: 'open',
         lastClosedForCleaningReopenDate: null,
         poolID: 3,
         nextPoolOpenDate: 'Wed 1 1:00 p.m.',

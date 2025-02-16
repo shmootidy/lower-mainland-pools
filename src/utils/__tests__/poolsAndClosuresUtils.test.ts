@@ -5,9 +5,8 @@ import {
   mockPoolClosures,
 } from '../../testData'
 import {
-  CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE,
   getReasonForClosure,
-  isPoolOpenNow,
+  getPoolOpenStatus,
 } from '../poolsAndClosuresUtils'
 
 describe('poolsAndClosuresUtils', () => {
@@ -21,43 +20,43 @@ describe('poolsAndClosuresUtils', () => {
     })
   })
 
-  describe('isPoolOpenNow', () => {
+  describe('getPoolOpenStatus', () => {
     const mockNow = DateTime.fromISO(MOCK_CURRENT_DATE_TIME_STRING)
 
     const curentlyRunningEvent = mockFilteredEvents[1]
-    it('returns true when pool has currently running event and no closure', () => {
-      expect(isPoolOpenNow([curentlyRunningEvent], mockNow)).toEqual(true)
+    it('returns "open" when pool has currently running event and no closure', () => {
+      expect(getPoolOpenStatus([curentlyRunningEvent], mockNow)).toEqual('open')
     })
 
     const pastClosure = mockPoolClosures[0]
-    it('returns true when pool has currently running event and past closure', () => {
+    it('returns "open" when pool has currently running event and past closure', () => {
       expect(
-        isPoolOpenNow([curentlyRunningEvent], mockNow, pastClosure)
-      ).toEqual(true)
+        getPoolOpenStatus([curentlyRunningEvent], mockNow, pastClosure)
+      ).toEqual('open')
     })
 
     const currentClosure = mockPoolClosures[2]
-    it('throws an error when pool has currently running non-closure event and overlapping closure data', () => {
-      expect(() =>
-        isPoolOpenNow([curentlyRunningEvent], mockNow, currentClosure)
-      ).toThrow(new Error(CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE))
+    it('returns "mismatch" when pool has currently running non-closure event and overlapping closure data', () => {
+      expect(
+        getPoolOpenStatus([curentlyRunningEvent], mockNow, currentClosure)
+      ).toEqual('mismatch')
     })
 
     const pastRunningEvent = mockFilteredEvents[0]
-    it('returns false when pool has no currently running events', () => {
-      expect(isPoolOpenNow([pastRunningEvent], mockNow)).toEqual(false)
-      expect(isPoolOpenNow([pastRunningEvent], mockNow, pastClosure)).toEqual(
-        false
-      )
+    it('returns "closed" when pool has no currently running events', () => {
+      expect(getPoolOpenStatus([pastRunningEvent], mockNow)).toEqual('closed')
       expect(
-        isPoolOpenNow([pastRunningEvent], mockNow, currentClosure)
-      ).toEqual(false)
+        getPoolOpenStatus([pastRunningEvent], mockNow, pastClosure)
+      ).toEqual('closed')
+      expect(
+        getPoolOpenStatus([pastRunningEvent], mockNow, currentClosure)
+      ).toEqual('closed')
     })
 
-    it('returns false when pool has no currently running events and current closure', () => {
+    it('returns "closed" when pool has no currently running events and current closure', () => {
       expect(
-        isPoolOpenNow([pastRunningEvent], mockNow, currentClosure)
-      ).toEqual(false)
+        getPoolOpenStatus([pastRunningEvent], mockNow, currentClosure)
+      ).toEqual('closed')
     })
   })
 })

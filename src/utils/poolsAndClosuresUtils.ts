@@ -1,10 +1,7 @@
 import { DateTime } from 'luxon'
-import { ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
+import { OpenStatus, ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 import { FilteredEvent } from './poolsUtils'
 import { PoolClosure } from '../APIs/poolClosuresAPI'
-
-export const CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE =
-  'There is a mismatch between closure data and the calendar.'
 
 export function getReasonForClosure(
   reasonForClosure?: string | null
@@ -18,11 +15,11 @@ export function getReasonForClosure(
   return 'unknown'
 }
 
-export function isPoolOpenNow(
+export function getPoolOpenStatus(
   todaysEvents: FilteredEvent[],
   now: DateTime<boolean>,
   poolClosure?: PoolClosure
-) {
+): OpenStatus {
   const isPoolClosedForCleaning =
     poolClosure?.closure_end_date && poolClosure?.closure_start_date
       ? DateTime.fromSQL(poolClosure.closure_end_date) > now &&
@@ -35,14 +32,14 @@ export function isPoolOpenNow(
   )
 
   if (isPoolClosedForCleaning && !currentEventIsClosure) {
-    throw new Error(CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE)
+    return 'mismatch'
   }
 
   if (isPoolClosedForCleaning || currentEventIsClosure) {
-    return false
+    return 'closed'
   }
 
-  return !!currentEvent.length
+  return currentEvent.length ? 'open' : 'closed'
 }
 
 export function getNextPoolOpenDate(

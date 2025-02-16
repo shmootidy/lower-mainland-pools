@@ -26,6 +26,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
       'no-unused-vars': ['warn', { args: 'none' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      'no-unreachable': 'warn',
       'no-console': 'warn',
       'no-shadow': 'off',
       '@typescript-eslint/no-shadow': ['error'],

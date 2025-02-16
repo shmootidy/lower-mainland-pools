@@ -8,6 +8,7 @@ import {
   faFaceSmile,
   faGhost,
   faHourglassHalf,
+  faQuestion,
   faSkull,
   faSoap,
   faX,
@@ -95,7 +96,7 @@ const ICON_AND_COLOR_MAP: IconAndColorMap = {
   },
 }
 
-export const OPEN_CLOSED_ICON_MAP: IconAndColorMap = {
+export const OPEN_STATUS_ICON_MAP: IconAndColorMap = {
   closed: {
     icon: faX,
     color: '#d93838',
@@ -103,5 +104,9 @@ export const OPEN_CLOSED_ICON_MAP: IconAndColorMap = {
   open: {
     icon: faCheck,
     color: '#5bc130',
+  },
+  mismatch: {
+    icon: faQuestion,
+    color: '#2e3ae6',
   },
 }

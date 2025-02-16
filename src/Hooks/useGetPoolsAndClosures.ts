@@ -10,10 +10,12 @@ import {
 import {
   getNextPoolOpenDate,
   getReasonForClosure,
-  isPoolOpenNow,
+  getPoolOpenStatus,
 } from '../utils/poolsAndClosuresUtils'
 
 export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
+export type OpenStatus = 'open' | 'closed' | 'mismatch'
+
 interface PoolsAndClosures {
   poolName: string
   nextPoolOpenDate: string | null
@@ -21,7 +23,7 @@ interface PoolsAndClosures {
   poolID: number
   poolUrl: string
   lastClosedForCleaningReopenDate: string | null
-  isOpen: boolean
+  openStatus: OpenStatus
 }
 
 export default function useGetPoolsAndClosures() {
@@ -59,7 +61,7 @@ export default function useGetPoolsAndClosures() {
       reasonForClosure: getReasonForClosure(poolClosure?.reason_for_closure),
       poolID: pool?.id,
       poolUrl: pool?.url ?? '',
-      isOpen: isPoolOpenNow(todaysEvents, now, poolClosure),
+      openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
     }
   })
 
