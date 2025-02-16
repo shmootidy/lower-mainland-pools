@@ -5,7 +5,7 @@ import useGetPoolsAndClosures from '../useGetPoolsAndClosures'
 import { vi } from 'vitest'
 import { MOCK_CURRENT_DATE_TIME_STRING } from '../../testData'
 
-describe.only('useGetPoolsAndClosures', () => {
+describe('useGetPoolsAndClosures', () => {
   it('returns pools and closures data', async () => {
     const mockNow = DateTime.fromISO(MOCK_CURRENT_DATE_TIME_STRING)
     vi.spyOn(DateTime, 'now').mockReturnValue(mockNow as DateTime<boolean>)
@@ -16,11 +16,29 @@ describe.only('useGetPoolsAndClosures', () => {
 
     expect(result.current.data).toEqual([
       {
+        isOpen: false,
+        lastClosedForCleaningReopenDate: '2025-03-01',
+        link: '1',
+        nextPoolOpenDate: '2025-03-02',
+        poolName: 'Pool 1',
+        poolUrl: '',
+        reasonForClosure: 'annual maintenance',
+      },
+      {
+        isOpen: false,
+        lastClosedForCleaningReopenDate: null,
+        link: '2',
+        nextPoolOpenDate: null,
+        poolName: 'Pool 2',
+        poolUrl: '',
+        reasonForClosure: 'unknown', // 'closed because of bears' becomes 'unknown'
+      },
+      {
         isOpen: true,
         lastClosedForCleaningReopenDate: null,
-        link: '1',
+        link: '3',
         nextPoolOpenDate: 'Wed 1 1:00 p.m.',
-        poolName: 'Pool 1',
+        poolName: 'Pool 3',
         poolUrl: '',
         reasonForClosure: null,
       },

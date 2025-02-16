@@ -11,7 +11,7 @@ import {
 export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
 interface PoolsAndClosures {
   poolName: string
-  nextPoolOpenDate: string
+  nextPoolOpenDate: string | null
   reasonForClosure: ReasonForClosure
   link: string
   poolUrl: string
@@ -98,10 +98,10 @@ function isPoolOpenNow(
 
 function getNextPoolOpenDate(
   todaysEvents: FilteredEvent[],
-  firstEventTomorrow: FilteredEvent,
+  firstEventTomorrow: FilteredEvent | null,
   now: DateTime<boolean>,
   poolClosure?: PoolClosure
-): string {
+): string | null {
   const isPoolClosedForCleaning = poolClosure?.closure_end_date
     ? DateTime.fromSQL(poolClosure.closure_end_date) > now
     : false
@@ -119,5 +119,8 @@ function getNextPoolOpenDate(
   if (firstFutureEventToday) {
     return firstFutureEventToday.start.toFormat('ccc d t')
   }
-  return firstEventTomorrow.start.toFormat('ccc d t')
+  if (firstEventTomorrow) {
+    return firstEventTomorrow.start.toFormat('ccc d t')
+  }
+  return null
 }

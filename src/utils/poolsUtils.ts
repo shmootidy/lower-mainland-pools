@@ -63,7 +63,9 @@ export function getFirstEventTomorrow(
       }
     })
 
-  return sortFilteredPoolEvents(filteredEvents)[0]
+  return filteredEvents.length
+    ? sortFilteredPoolEvents(filteredEvents)[0]
+    : null
 }
 
 function getEventStartEndAndTimeline(

@@ -8,11 +8,19 @@ export const MOCK_CURRENT_DATE_TIME_STRING = '2025-01-01T12:00:00'
 export const mockPoolClosures: PoolClosure[] = [
   {
     id: 1,
-    pool_id: 10,
-    reason_for_closure: null,
+    pool_id: 1,
+    reason_for_closure: 'annual maintenance',
     event_id: 123,
     created_at: '2025-01-01',
     closure_end_date: '2025-03-01',
+  },
+  {
+    id: 2,
+    pool_id: 2,
+    reason_for_closure: 'closed because of bears',
+    event_id: 123,
+    created_at: '2025-01-01',
+    closure_end_date: null, // sometimes pools don't know when they will reopend
   },
 ]
 
@@ -27,7 +35,31 @@ export const mockPools: Pool[] = [
     name: 'Pool 1',
     notes: null,
     url: null,
-    center_id: 12,
+    center_id: 11,
+  },
+  {
+    id: 2,
+    address: null,
+    coordinates: null,
+    created_date: '',
+    amenities: ['pool', 'slide'],
+    locker_type: null,
+    name: 'Pool 2',
+    notes: null,
+    url: null,
+    center_id: 22,
+  },
+  {
+    id: 3,
+    address: null,
+    coordinates: null,
+    created_date: '',
+    amenities: ['pool', 'slide'],
+    locker_type: null,
+    name: 'Pool 3',
+    notes: null,
+    url: null,
+    center_id: 33,
   },
 ]
 
@@ -130,9 +162,21 @@ export const expectedFilteredEvents = [
 
 export const mockPoolCalendars: VancouverPoolCalendar[] = [
   {
-    center_id: 12,
-    center_name: 'Pool 1',
-    total: 1,
+    center_id: mockPools[0].center_id,
+    center_name: mockPools[0].name,
+    total: mockPoolEvents.length,
+    events: mockPoolEvents,
+  },
+  {
+    center_id: mockPools[1].center_id,
+    center_name: mockPools[1].name,
+    total: 0,
+    events: [], // closed for bears
+  },
+  {
+    center_id: mockPools[2].center_id,
+    center_name: mockPools[2].name,
+    total: mockPoolEvents.length,
     events: mockPoolEvents,
   },
 ]

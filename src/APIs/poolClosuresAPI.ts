@@ -9,7 +9,7 @@ export interface PoolClosure {
   reason_for_closure: string | null
   event_id: number
   created_at: string
-  closure_end_date: string
+  closure_end_date: string | null
 }
 
 export function useGetPoolClosures() {
