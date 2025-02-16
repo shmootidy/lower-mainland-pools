@@ -6,7 +6,7 @@ import {
   getFirstEventTomorrow,
 } from '../poolsUtils'
 import {
-  expectedFilteredEvents,
+  mockFilteredEvents,
   MOCK_CURRENT_DATE_TIME_STRING,
   mockPoolEvents,
   tomorrowEvent1End,
@@ -19,13 +19,13 @@ describe('poolsUtils', () => {
     it('returns all events for today if no filtered events are passed', () => {
       expect(
         getFilteredPoolEventsForToday(mockPoolEvents, [], mockNow)
-      ).toEqual(expectedFilteredEvents.slice(0, 3))
+      ).toEqual(mockFilteredEvents.slice(0, 3))
     })
 
     it('returns events for today, filtered by category', () => {
       expect(
         getFilteredPoolEventsForToday(mockPoolEvents, ['event 1'], mockNow)
-      ).toEqual([expectedFilteredEvents[0]])
+      ).toEqual([mockFilteredEvents[0]])
     })
   })
 

@@ -18,7 +18,7 @@ interface PoolsAndClosures {
   poolName: string
   nextPoolOpenDate: string | null
   reasonForClosure: ReasonForClosure
-  link: string
+  poolID: number
   poolUrl: string
   lastClosedForCleaningReopenDate: string | null
   isOpen: boolean
@@ -57,7 +57,7 @@ export default function useGetPoolsAndClosures() {
       ),
       lastClosedForCleaningReopenDate: poolClosure?.closure_end_date ?? null,
       reasonForClosure: getReasonForClosure(poolClosure?.reason_for_closure),
-      link: `${pool?.id}`,
+      poolID: pool?.id,
       poolUrl: pool?.url ?? '',
       isOpen: isPoolOpenNow(todaysEvents, now, poolClosure),
     }

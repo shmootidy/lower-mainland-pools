@@ -51,7 +51,7 @@ export default function CleanestPools() {
                       <FontAwesomeIcon style={{ color }} icon={icon} />
                     </TableData>
                     <TableData>
-                      <Link to={`pool?poolID=${d.link}`}>{d.poolName}</Link>
+                      <Link to={`pool?poolID=${d.poolID}`}>{d.poolName}</Link>
                     </TableData>
                     <TableData>
                       <FontAwesomeIcon

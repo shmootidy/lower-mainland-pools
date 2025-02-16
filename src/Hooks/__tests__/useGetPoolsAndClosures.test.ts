@@ -19,7 +19,7 @@ describe('useGetPoolsAndClosures', () => {
       {
         isOpen: false,
         lastClosedForCleaningReopenDate: '2025-03-01',
-        link: '1',
+        poolID: 1,
         nextPoolOpenDate: '2025-03-02',
         poolName: 'Pool 1',
         poolUrl: '',
@@ -28,7 +28,7 @@ describe('useGetPoolsAndClosures', () => {
       {
         isOpen: false,
         lastClosedForCleaningReopenDate: null,
-        link: '2',
+        poolID: 2,
         nextPoolOpenDate: null,
         poolName: 'Pool 2',
         poolUrl: '',
@@ -37,7 +37,7 @@ describe('useGetPoolsAndClosures', () => {
       {
         isOpen: true,
         lastClosedForCleaningReopenDate: null,
-        link: '3',
+        poolID: 3,
         nextPoolOpenDate: 'Wed 1 1:00 p.m.',
         poolName: 'Pool 3',
         poolUrl: '',

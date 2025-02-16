@@ -3,6 +3,9 @@ import { ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 import { FilteredEvent } from './poolsUtils'
 import { PoolClosure } from '../APIs/poolClosuresAPI'
 
+export const CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE =
+  'There is a mismatch between closure data and the calendar.'
+
 export function getReasonForClosure(
   reasonForClosure?: string | null
 ): ReasonForClosure {
@@ -25,13 +28,20 @@ export function isPoolOpenNow(
       ? DateTime.fromSQL(poolClosure.closure_end_date) > now &&
         DateTime.fromSQL(poolClosure.closure_start_date) < now
       : false
-  if (isPoolClosedForCleaning) {
-    return false
-  }
+
   const currentEvent = todaysEvents.filter((e) => e.timeline === 'present')
-  if (currentEvent.every((e) => e.title.includes('Closure'))) {
+  const currentEventIsClosure = currentEvent.every((e) =>
+    e.title.includes('Closure')
+  )
+
+  if (isPoolClosedForCleaning && !currentEventIsClosure) {
+    throw new Error(CLOSURE_EVENT_MISMATCH_ERROR_MESSAGE)
+  }
+
+  if (isPoolClosedForCleaning || currentEventIsClosure) {
     return false
   }
+
   return !!currentEvent.length
 }
 

@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import { PoolClosure } from './APIs/poolClosuresAPI'
 import { Pool } from './APIs/poolsAPI'
 import { VancouverPoolCalendar } from './APIs/vancouverPoolCalendarsAPI'
+import { FilteredEvent } from './utils/poolsUtils'
 
 export const MOCK_CURRENT_DATE_TIME_STRING = '2025-01-01T12:00:00'
 
@@ -75,12 +76,12 @@ export const mockPools: Pool[] = [
   },
 ]
 
-const poolEvent1Start = '2025-01-01 08:00:00'
-const poolEvent1End = '2025-01-01 09:00:00'
-const poolEvent2Start = '2025-01-01 11:00:00'
-const poolEvent2End = '2025-01-01 13:00:00'
-const poolEvent3Start = '2025-01-01 13:00:00'
-const poolEvent3End = '2025-01-01 15:00:00'
+const poolEvent1Start = '2025-01-01 08:00:00' // past
+const poolEvent1End = '2025-01-01 09:00:00' // past
+const poolEvent2Start = '2025-01-01 11:00:00' // present
+const poolEvent2End = '2025-01-01 13:00:00' // present
+const poolEvent3Start = '2025-01-01 13:00:00' // future
+const poolEvent3End = '2025-01-01 15:00:00' // future
 export const tomorrowEvent1Start = '2025-01-02 09:00:00'
 export const tomorrowEvent1End = '2025-01-02 10:00:00'
 const tomorrowEvent2Start = '2025-01-02 13:00:00'
@@ -139,7 +140,7 @@ export const mockPoolEvents = [
   },
 ]
 
-export const expectedFilteredEvents = [
+export const mockFilteredEvents: FilteredEvent[] = [
   {
     ...mockPoolEvents[0],
     start: DateTime.fromSQL(poolEvent1Start),
@@ -172,12 +173,23 @@ export const expectedFilteredEvents = [
   },
 ]
 
+const allDayClosureEvent = {
+  activity_detail_url: '',
+  end_time: '2025-01-01T23:59:59',
+  price: {
+    estimate_price: '',
+  },
+  start_time: '2025-01-01T00:00:00',
+  title: 'Pool Closure',
+  event_item_id: 1,
+}
+
 export const mockPoolCalendars: VancouverPoolCalendar[] = [
   {
     center_id: mockPools[0].center_id,
     center_name: mockPools[0].name,
-    total: mockPoolEvents.length,
-    events: mockPoolEvents,
+    total: 1,
+    events: [allDayClosureEvent],
   },
   {
     center_id: mockPools[1].center_id,
