@@ -12,8 +12,8 @@ export const mockPoolClosures: PoolClosure[] = [
     pool_id: 1,
     reason_for_closure: 'annual maintenance',
     event_id: 123,
-    created_at: '2025-01-01',
-    closure_end_date: '2025-03-01',
+    created_at: '2024-01-01',
+    closure_end_date: '2024-03-01',
   },
   {
     id: 2,
@@ -22,6 +22,14 @@ export const mockPoolClosures: PoolClosure[] = [
     event_id: 123,
     created_at: '2025-01-01',
     closure_end_date: null, // sometimes pools don't know when they will reopend
+  },
+  {
+    id: 3,
+    pool_id: 1,
+    reason_for_closure: 'annual maintenance',
+    event_id: 123,
+    created_at: '2025-01-01',
+    closure_end_date: '2025-03-01',
   },
 ]
 
