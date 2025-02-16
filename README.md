@@ -1,6 +1,6 @@
 # Lower Mainland Pools
 
-See which pools are open -- and how long it has been since they were last cleaned -- at a glance!
+[See which pools are open -- and how long it has been since they were last cleaned -- at a glance!](https://shmootidy.github.io/lower-mainland-pools/#/)
 
 ![lower-mainland-pools](/public/lower-mainland-pools.png)
 
