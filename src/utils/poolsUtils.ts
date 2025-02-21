@@ -28,7 +28,9 @@ export function getFilteredPoolEventByDay(
 ) {
   const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
-      const isToday = DateTime.fromSQL(e.start_time).hasSame(now, 'day')
+      const isToday = DateTime.fromSQL(e.start_time)
+        .minus({ days: daysInFuture })
+        .hasSame(now, 'day')
 
       const eventIsValid = filteredEventCategories.some((cat) => {
         return e.title.includes(cat)
@@ -99,4 +101,13 @@ function sortFilteredPoolEvents(
     }
     return bDate - aDate
   })
+}
+
+export function getPoolHeadingText(filteredEvent: FilteredEvent | null) {
+  if (!filteredEvent) {
+    return null
+  }
+  return `Schedule for ${DateTime.fromSQL(filteredEvent.start_time).toFormat(
+    'ccc d',
+  )}`
 }
