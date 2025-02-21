@@ -44,30 +44,39 @@ export default function useGetPoolsAndClosures() {
 
   const now = DateTime.now()
 
-  const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
-    const pool = poolsGroupedByCentreID[c.center_id]
-    const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
-    const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
+  const isLoading = poolClosuresLoading || poolsLoading || poolCalendarsLoading
+  const hasError = poolClosuresError || poolCalendarsError || poolsError
 
-    return {
-      poolName: pool?.name ?? 'name not found',
-      nextPoolOpenDate: getNextPoolOpenDate(
-        todaysEvents,
-        getFirstEventTomorrow(c.events, now),
-        now,
-        poolClosure
-      ),
-      lastClosedForCleaningReopenDate: poolClosure?.closure_end_date ?? null,
-      reasonForClosure: getReasonForClosure(poolClosure?.reason_for_closure),
-      poolID: pool?.id,
-      poolUrl: pool?.url ?? '',
-      openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
-    }
-  })
+  const poolsAndClosures: PoolsAndClosures[] =
+    !isLoading && !hasError
+      ? poolCalendars.map((c) => {
+          const pool = poolsGroupedByCentreID[c.center_id]
+          const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
+          const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
+
+          return {
+            poolName: pool?.name ?? 'name not found',
+            nextPoolOpenDate: getNextPoolOpenDate(
+              todaysEvents,
+              getFirstEventTomorrow(c.events, now),
+              now,
+              poolClosure
+            ),
+            lastClosedForCleaningReopenDate:
+              poolClosure?.closure_end_date ?? null,
+            reasonForClosure: getReasonForClosure(
+              poolClosure?.reason_for_closure
+            ),
+            poolID: pool?.id,
+            poolUrl: pool?.url ?? '',
+            openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
+          }
+        })
+      : []
 
   return {
-    isLoading: poolClosuresLoading || poolCalendarsLoading || poolsLoading,
-    hasError: poolClosuresError || poolCalendarsError || poolsError,
+    isLoading,
+    hasError,
     data: poolsAndClosures,
   }
 }
