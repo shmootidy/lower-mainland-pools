@@ -113,7 +113,7 @@ export default function Pool() {
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
-          <h2 style={{ margin: 0, textAlign: 'center' }}>
+          <h2 style={{ margin: 12, textAlign: 'center' }}>
             {getPoolHeadingText(filteredEvents ? filteredEvents[0] : null)}
           </h2>
           <button
@@ -179,8 +179,7 @@ export default function Pool() {
 
 const HeadingWrapper = styled.div`
   display: flex;
-  justify-contents: center;
+  justify-content: space-between;
   align-items: center;
   margin-top: 16px;
-  margin-bottom: 16px;
 `

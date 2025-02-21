@@ -107,7 +107,7 @@ export function getPoolHeadingText(filteredEvent: FilteredEvent | null) {
   if (!filteredEvent) {
     return null
   }
-  return `Schedule for ${DateTime.fromSQL(filteredEvent.start_time).toFormat(
+  return `Schedule: ${DateTime.fromSQL(filteredEvent.start_time).toFormat(
     'ccc d',
   )}`
 }
