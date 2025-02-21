@@ -46,7 +46,7 @@ export default function useGetPoolsAndClosures() {
 
   const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
     const pool = poolsGroupedByCentreID[c.center_id]
-    const poolClosure = poolClosuresGroupedByPoolID[pool.id]
+    const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
     const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
 
     return {
