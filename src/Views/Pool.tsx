@@ -18,6 +18,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
+import styled from '@emotion/styled/macro'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -103,15 +104,7 @@ export default function Pool() {
           })}
         </ul>
         <hr />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: 16,
-            marginBottom: 16,
-            alignItems: 'center',
-          }}
-        >
+        <HeadingWrapper>
           <button
             onClick={() =>
               setDaysInFuture((prev) => (prev - 1 >= 0 ? prev - 1 : 0))
@@ -131,7 +124,7 @@ export default function Pool() {
           >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
-        </div>
+        </HeadingWrapper>
         <StateManager
           isLoading={poolCalendarLoading}
           hasError={poolCalendarError}
@@ -183,3 +176,11 @@ export default function Pool() {
     </StateManager>
   )
 }
+
+const HeadingWrapper = styled.div`
+  display: flex;
+  justify-contents: center;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+`
