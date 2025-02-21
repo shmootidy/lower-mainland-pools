@@ -20,7 +20,7 @@ export function useGetPoolClosures() {
       throw new Error('Network response was not ok')
     }
     const json = await res.json()
-    return json // res.json()
+    return json
   }
 
   const {

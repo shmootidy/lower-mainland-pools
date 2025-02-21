@@ -64,7 +64,7 @@ export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
     isError: poolCalendarError,
   } = useQuery<VancouverPoolCalendar>({
     ...DEFAULT_COMMON_API_CONFIG,
-    queryKey: ['poolCalendar'],
+    queryKey: ['poolCalendar', `${centreID}`],
     queryFn: getVancouverPoolCalendars,
     enabled: !!centreID,
   })
