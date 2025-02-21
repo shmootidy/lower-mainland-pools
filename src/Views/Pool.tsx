@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -18,7 +19,6 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
-import styled from '@emotion/styled/macro'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
