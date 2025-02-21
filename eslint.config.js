@@ -31,5 +31,5 @@ export default tseslint.config(
       'no-shadow': 'off',
       '@typescript-eslint/no-shadow': ['error'],
     },
-  }
+  },
 )

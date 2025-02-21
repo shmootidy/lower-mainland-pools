@@ -20,10 +20,11 @@ export interface FilteredEvent extends PoolEvent {
   timeline: EventTimeline
 }
 
-export function getFilteredPoolEventsForToday(
+export function getFilteredPoolEventByDay(
   poolEvents: PoolEvent[],
   filteredEventCategories: string[],
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
+  daysInFuture = 0,
 ) {
   const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
@@ -50,7 +51,7 @@ export function getFilteredPoolEventsForToday(
 
 export function getFirstEventTomorrow(
   poolEvents: PoolEvent[],
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
 ) {
   const tomorrow = now.plus({ days: 1 })
 
@@ -73,7 +74,7 @@ export function getFirstEventTomorrow(
 
 function getEventStartEndAndTimeline(
   poolEvent: PoolEvent,
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
 ) {
   const end = DateTime.fromSQL(poolEvent.end_time)
   const start = DateTime.fromSQL(poolEvent.start_time)
@@ -88,7 +89,7 @@ function getEventStartEndAndTimeline(
 
 function sortFilteredPoolEvents(
   filteredEvents: FilteredEvent[],
-  order?: 'asc' | 'desc'
+  order?: 'asc' | 'desc',
 ) {
   return filteredEvents.sort((a, b) => {
     const aDate = a.start.toMillis()

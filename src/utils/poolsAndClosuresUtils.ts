@@ -4,7 +4,7 @@ import { FilteredEvent } from './poolsUtils'
 import { PoolClosure } from '../APIs/poolClosuresAPI'
 
 export function getReasonForClosure(
-  reasonForClosure?: string | null
+  reasonForClosure?: string | null,
 ): ReasonForClosure {
   if (!reasonForClosure) {
     return null
@@ -18,7 +18,7 @@ export function getReasonForClosure(
 export function getPoolOpenStatus(
   todaysEvents: FilteredEvent[],
   now: DateTime<boolean>,
-  poolClosure?: PoolClosure
+  poolClosure?: PoolClosure,
 ): OpenStatus {
   const isPoolClosedForCleaning =
     poolClosure?.closure_end_date && poolClosure?.closure_start_date
@@ -28,7 +28,7 @@ export function getPoolOpenStatus(
 
   const currentEvent = todaysEvents.filter((e) => e.timeline === 'present')
   const currentEventIsClosure = currentEvent.every((e) =>
-    e.title.includes('Closure')
+    e.title.includes('Closure'),
   )
 
   if (isPoolClosedForCleaning && !currentEventIsClosure) {
@@ -46,7 +46,7 @@ export function getNextPoolOpenDate(
   todaysEvents: FilteredEvent[],
   firstEventTomorrow: FilteredEvent | null,
   now: DateTime<boolean>,
-  poolClosure?: PoolClosure
+  poolClosure?: PoolClosure,
 ): string | null {
   const isPoolClosedForCleaning = poolClosure?.closure_end_date
     ? DateTime.fromSQL(poolClosure.closure_end_date) > now
@@ -60,7 +60,7 @@ export function getNextPoolOpenDate(
   }
 
   const firstFutureEventToday = todaysEvents.find(
-    (e) => e.timeline === 'future'
+    (e) => e.timeline === 'future',
   )
   if (firstFutureEventToday) {
     return firstFutureEventToday.start.toFormat('ccc d t')

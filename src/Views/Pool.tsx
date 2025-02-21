@@ -7,7 +7,7 @@ import { useGetPoolsByID } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   EVENT_CATEGORIES,
-  getFilteredPoolEventsForToday,
+  getFilteredPoolEventByDay,
 } from '../utils/poolsUtils'
 import StateManager from '../Components/StateManager'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
@@ -21,7 +21,7 @@ export default function Pool() {
     Omit<CheckboxProps, 'onToggleChecked'>[]
   >([])
   const { poolsByID, poolsByIDLoading, poolsByIDError } = useGetPoolsByID(
-    poolID ? [Number(poolID)] : []
+    poolID ? [Number(poolID)] : [],
   )
   const centreID = poolsByID[0]?.center_id
   const { poolCalendar, poolCalendarLoading, poolCalendarError } =
@@ -30,25 +30,25 @@ export default function Pool() {
   useEffect(() => {
     if (!poolCalendarLoading) {
       const now = DateTime.now()
-      const initialFilteredEvents = getFilteredPoolEventsForToday(
+      const initialFilteredEvents = getFilteredPoolEventByDay(
         poolCalendar?.events ?? [],
         [],
-        now
+        now,
       )
       setFilteredEventCategories(
         Array.from(
           new Set(
             initialFilteredEvents.map((e) => {
               const isChecked = EVENT_CATEGORIES.some((c) =>
-                e.title.includes(c)
+                e.title.includes(c),
               )
               return JSON.stringify({
                 isChecked,
                 label: e.title,
               })
-            })
-          )
-        ).map((e) => JSON.parse(e)) ?? []
+            }),
+          ),
+        ).map((e) => JSON.parse(e)) ?? [],
       )
     }
   }, [poolCalendar, poolCalendarLoading])
@@ -61,10 +61,10 @@ export default function Pool() {
     )
   }
 
-  const filteredEvents = getFilteredPoolEventsForToday(
+  const filteredEvents = getFilteredPoolEventByDay(
     poolCalendar?.events ?? [],
     filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label),
-    DateTime.now()
+    DateTime.now(),
   )
 
   function handleToggleCheck(eventCategory: string) {
