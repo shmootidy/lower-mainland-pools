@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -7,48 +8,56 @@ import { useGetPoolsByID } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from '../APIs/vancouverPoolCalendarsAPI'
 import {
   EVENT_CATEGORIES,
-  getFilteredPoolEventsForToday,
+  getFilteredPoolEventByDay,
+  getPoolHeadingText,
 } from '../utils/poolsUtils'
 import StateManager from '../Components/StateManager'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
 import { TableData, TableHeader } from '../Components/StyledComponents'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
   const poolID = searchParams.get('poolID')
 
-  const [filteredEventCategories, setFilteredEventCategories] = useState<
-    Omit<CheckboxProps, 'onToggleChecked'>[]
-  >([])
   const { poolsByID, poolsByIDLoading, poolsByIDError } = useGetPoolsByID(
-    poolID ? [Number(poolID)] : []
+    poolID ? [Number(poolID)] : [],
   )
   const centreID = poolsByID[0]?.center_id
   const { poolCalendar, poolCalendarLoading, poolCalendarError } =
     useGetVancouverPoolCalendarByCentreID(centreID)
 
+  const [filteredEventCategories, setFilteredEventCategories] = useState<
+    Omit<CheckboxProps, 'onToggleChecked'>[]
+  >([])
+  const [daysInFuture, setDaysInFuture] = useState(0)
+
   useEffect(() => {
     if (!poolCalendarLoading) {
       const now = DateTime.now()
-      const initialFilteredEvents = getFilteredPoolEventsForToday(
+      const initialFilteredEvents = getFilteredPoolEventByDay(
         poolCalendar?.events ?? [],
         [],
-        now
+        now,
       )
       setFilteredEventCategories(
         Array.from(
           new Set(
             initialFilteredEvents.map((e) => {
               const isChecked = EVENT_CATEGORIES.some((c) =>
-                e.title.includes(c)
+                e.title.includes(c),
               )
               return JSON.stringify({
                 isChecked,
                 label: e.title,
               })
-            })
-          )
-        ).map((e) => JSON.parse(e)) ?? []
+            }),
+          ),
+        ).map((e) => JSON.parse(e)) ?? [],
       )
     }
   }, [poolCalendar, poolCalendarLoading])
@@ -61,10 +70,11 @@ export default function Pool() {
     )
   }
 
-  const filteredEvents = getFilteredPoolEventsForToday(
+  const filteredEvents = getFilteredPoolEventByDay(
     poolCalendar?.events ?? [],
     filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label),
-    DateTime.now()
+    DateTime.now(),
+    daysInFuture,
   )
 
   function handleToggleCheck(eventCategory: string) {
@@ -80,9 +90,9 @@ export default function Pool() {
 
   return (
     <StateManager
-      isLoading={poolsByIDLoading}
-      hasError={poolsByIDError}
-      noData={!poolsByID.length}
+      isLoading={poolsByIDLoading || poolCalendarLoading}
+      hasError={poolsByIDError || poolCalendarError}
+      noData={!poolsByID.length || !filteredEvents?.length}
     >
       <div>
         <Link to='/'>back</Link>
@@ -94,24 +104,46 @@ export default function Pool() {
           })}
         </ul>
         <hr />
-        <h2 style={{ margin: 0 }}>Today's schedule</h2>
+        <HeadingWrapper>
+          <button
+            onClick={() =>
+              setDaysInFuture((prev) => (prev - 1 >= 0 ? prev - 1 : 0))
+            }
+            disabled={daysInFuture === 0}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          <h2 style={{ margin: 12, textAlign: 'center' }}>
+            {getPoolHeadingText(filteredEvents ? filteredEvents[0] : null)}
+          </h2>
+          <button
+            onClick={() =>
+              setDaysInFuture((prev) => (prev + 1 <= 5 ? prev + 1 : prev))
+            }
+            disabled={daysInFuture === 5}
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </HeadingWrapper>
         <StateManager
           isLoading={poolCalendarLoading}
           hasError={poolCalendarError}
           noData={!poolCalendar}
         >
           <>
-            {filteredEventCategories.map((c, i) => {
-              return (
-                <div key={i}>
-                  <Checkbox
-                    label={c.label}
-                    isChecked={c.isChecked}
-                    onToggleChecked={handleToggleCheck}
-                  />
-                </div>
-              )
-            })}
+            <div style={{ marginBottom: 16 }}>
+              {filteredEventCategories.map((c, i) => {
+                return (
+                  <div key={i}>
+                    <Checkbox
+                      label={c.label}
+                      isChecked={c.isChecked}
+                      onToggleChecked={handleToggleCheck}
+                    />
+                  </div>
+                )
+              })}
+            </div>
             <table>
               <thead>
                 <tr>
@@ -144,3 +176,10 @@ export default function Pool() {
     </StateManager>
   )
 }
+
+const HeadingWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+`

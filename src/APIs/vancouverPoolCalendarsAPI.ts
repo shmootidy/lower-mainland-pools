@@ -50,7 +50,7 @@ export function useGetVancouverPoolCalendars() {
 export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
   async function getVancouverPoolCalendars() {
     const res = await fetch(
-      `${VERCEL_URL}/getPoolScheduleByCentreID?centreID=${centreID}`
+      `${VERCEL_URL}/getPoolScheduleByCentreID?centreID=${centreID}`,
     )
     if (!res.ok) {
       throw new Error('Network response was not ok')

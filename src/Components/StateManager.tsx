@@ -9,6 +9,7 @@ interface IProps {
 
 export default function StateManager(props: IProps) {
   const { isLoading, hasError, children, noData } = props
+
   if (isLoading) {
     return <div data-testid='loader'>Loading...</div>
   }

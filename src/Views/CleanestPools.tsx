@@ -42,7 +42,7 @@ export default function CleanestPools() {
                 const { icon, color } = getPoolStatusIcon(
                   d.lastClosedForCleaningReopenDate,
                   d.reasonForClosure,
-                  now
+                  now,
                 )
 
                 return (

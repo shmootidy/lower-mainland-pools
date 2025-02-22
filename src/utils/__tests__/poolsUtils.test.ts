@@ -1,10 +1,7 @@
 import { DateTime } from 'luxon'
 import { expect, describe, it } from 'vitest'
 
-import {
-  getFilteredPoolEventsForToday,
-  getFirstEventTomorrow,
-} from '../poolsUtils'
+import { getFilteredPoolEventByDay, getFirstEventTomorrow } from '../poolsUtils'
 import {
   mockFilteredEvents,
   MOCK_CURRENT_DATE_TIME_STRING,
@@ -15,16 +12,16 @@ import {
 
 describe('poolsUtils', () => {
   const mockNow = DateTime.fromISO(MOCK_CURRENT_DATE_TIME_STRING)
-  describe('getFilteredPoolEventsForToday', () => {
+  describe('getFilteredPoolEventByDay', () => {
     it('returns all events for today if no filtered events are passed', () => {
-      expect(
-        getFilteredPoolEventsForToday(mockPoolEvents, [], mockNow)
-      ).toEqual(mockFilteredEvents.slice(0, 3))
+      expect(getFilteredPoolEventByDay(mockPoolEvents, [], mockNow)).toEqual(
+        mockFilteredEvents.slice(0, 3)
+      )
     })
 
     it('returns events for today, filtered by category', () => {
       expect(
-        getFilteredPoolEventsForToday(mockPoolEvents, ['event 1'], mockNow)
+        getFilteredPoolEventByDay(mockPoolEvents, ['event 1'], mockNow)
       ).toEqual([mockFilteredEvents[0]])
     })
   })

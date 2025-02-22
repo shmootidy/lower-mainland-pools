@@ -20,14 +20,17 @@ export interface FilteredEvent extends PoolEvent {
   timeline: EventTimeline
 }
 
-export function getFilteredPoolEventsForToday(
+export function getFilteredPoolEventByDay(
   poolEvents: PoolEvent[],
   filteredEventCategories: string[],
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
+  daysInFuture = 0,
 ) {
   const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
-      const isToday = DateTime.fromSQL(e.start_time).hasSame(now, 'day')
+      const isToday = DateTime.fromSQL(e.start_time)
+        .minus({ days: daysInFuture })
+        .hasSame(now, 'day')
 
       const eventIsValid = filteredEventCategories.some((cat) => {
         return e.title.includes(cat)
@@ -50,7 +53,7 @@ export function getFilteredPoolEventsForToday(
 
 export function getFirstEventTomorrow(
   poolEvents: PoolEvent[],
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
 ) {
   const tomorrow = now.plus({ days: 1 })
 
@@ -73,7 +76,7 @@ export function getFirstEventTomorrow(
 
 function getEventStartEndAndTimeline(
   poolEvent: PoolEvent,
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
 ) {
   const end = DateTime.fromSQL(poolEvent.end_time)
   const start = DateTime.fromSQL(poolEvent.start_time)
@@ -88,7 +91,7 @@ function getEventStartEndAndTimeline(
 
 function sortFilteredPoolEvents(
   filteredEvents: FilteredEvent[],
-  order?: 'asc' | 'desc'
+  order?: 'asc' | 'desc',
 ) {
   return filteredEvents.sort((a, b) => {
     const aDate = a.start.toMillis()
@@ -98,4 +101,13 @@ function sortFilteredPoolEvents(
     }
     return bDate - aDate
   })
+}
+
+export function getPoolHeadingText(filteredEvent: FilteredEvent | null) {
+  if (!filteredEvent) {
+    return null
+  }
+  return `Schedule: ${DateTime.fromSQL(filteredEvent.start_time).toFormat(
+    'ccc d',
+  )}`
 }

@@ -4,7 +4,7 @@ import { PoolClosure, useGetPoolClosures } from '../APIs/poolClosuresAPI'
 import { Pool, useGetPools } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 import {
-  getFilteredPoolEventsForToday,
+  getFilteredPoolEventByDay,
   getFirstEventTomorrow,
 } from '../utils/poolsUtils'
 import {
@@ -52,7 +52,7 @@ export default function useGetPoolsAndClosures() {
       ? poolCalendars.map((c) => {
           const pool = poolsGroupedByCentreID[c.center_id]
           const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
-          const todaysEvents = getFilteredPoolEventsForToday(c.events, [], now)
+          const todaysEvents = getFilteredPoolEventByDay(c.events, [], now)
 
           return {
             poolName: pool?.name ?? 'name not found',
@@ -60,12 +60,12 @@ export default function useGetPoolsAndClosures() {
               todaysEvents,
               getFirstEventTomorrow(c.events, now),
               now,
-              poolClosure
+              poolClosure,
             ),
             lastClosedForCleaningReopenDate:
               poolClosure?.closure_end_date ?? null,
             reasonForClosure: getReasonForClosure(
-              poolClosure?.reason_for_closure
+              poolClosure?.reason_for_closure,
             ),
             poolID: pool?.id,
             poolUrl: pool?.url ?? '',
