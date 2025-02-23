@@ -21,6 +21,18 @@ export interface VancouverPoolCalendar {
   events: PoolEvent[]
 }
 
+interface RichmondPoolCalendar {
+  [poolName: string]: {
+    [days: string]: string
+  }
+}
+
+export interface PoolCalendars {
+  Vancouver: VancouverPoolCalendar[]
+  Richmond: RichmondPoolCalendar[]
+}
+
+// not just vancouver anymore
 export function useGetVancouverPoolCalendars() {
   async function getVancouverPoolCalendars() {
     const res = await fetch(`${VERCEL_URL}/getPoolSchedules`)
@@ -31,10 +43,10 @@ export function useGetVancouverPoolCalendars() {
   }
 
   const {
-    data: poolCalendars = [],
+    data: poolCalendars = { Vancouver: [], Richmond: [] },
     isLoading: poolCalendarsLoading,
     isError: poolCalendarsError,
-  } = useQuery<VancouverPoolCalendar[]>({
+  } = useQuery<PoolCalendars>({
     ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolCalendars'],
     queryFn: getVancouverPoolCalendars,

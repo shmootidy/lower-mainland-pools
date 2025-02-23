@@ -30,8 +30,14 @@ export default function useGetPoolsAndClosures() {
   const { poolClosures, poolClosuresLoading, poolClosuresError } =
     useGetPoolClosures()
   const { pools, poolsLoading, poolsError } = useGetPools()
-  const { poolCalendars, poolCalendarsLoading, poolCalendarsError } =
-    useGetVancouverPoolCalendars()
+  console.log(pools)
+  const {
+    poolCalendars: cals,
+    poolCalendarsLoading,
+    poolCalendarsError,
+  } = useGetVancouverPoolCalendars()
+  console.log(cals.Richmond)
+  const poolCalendarsVancouver = cals.Vancouver
 
   const poolClosuresGroupedByPoolID: { [poolID: number]: PoolClosure } = {}
   poolClosures.forEach((c) => {
@@ -50,7 +56,7 @@ export default function useGetPoolsAndClosures() {
 
   const poolsAndClosures: PoolsAndClosures[] =
     !isLoading && !hasError
-      ? poolCalendars.map((c) => {
+      ? poolCalendarsVancouver.map((c) => {
           const pool = poolsGroupedByCentreID[c.center_id]
           const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
           const todaysEvents = getFilteredPoolEventByDay(c.events, [], now)
@@ -75,9 +81,34 @@ export default function useGetPoolsAndClosures() {
         })
       : []
 
+  const poolsGroupedByPoolName: { [poolName: string]: Pool } = {}
+  pools.forEach((p) => {
+    poolsGroupedByPoolName[p.name] = p
+  })
+  const richmond: PoolsAndClosures[] = cals.Richmond.map((pool) => {
+    let poolName = ''
+    Object.keys(pool).forEach((name) => {
+      poolName = name
+    })
+
+    const thisPool = poolsGroupedByPoolName[poolName]
+
+    return {
+      poolName,
+      nextPoolOpenDate: null,
+      lastClosedForCleaningReopenDate: null,
+      reasonForClosure: null,
+      poolID: thisPool?.id,
+      poolUrl: thisPool?.url ?? '',
+      openStatus: 'open', // getRichmondOpendStatus()
+    }
+  })
+
+  console.log(richmond)
+
   return {
     isLoading,
     hasError,
-    data: poolsAndClosures,
+    data: [...poolsAndClosures, ...richmond],
   }
 }
