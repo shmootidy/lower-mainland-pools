@@ -56,7 +56,7 @@ export function useGetPoolsByID(poolIDs: number[]) {
     isLoading: poolsByIDLoading,
     isError: poolsByIDError,
   } = useQuery<Pool[]>({
-    queryKey: [`poolIDs:${poolIDs}`],
+    queryKey: [`poolIDs:${poolIDs.join(',')}`],
     queryFn: getPoolsByID,
     enabled: !!poolIDs.length,
   })
