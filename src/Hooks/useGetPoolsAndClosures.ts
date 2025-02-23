@@ -38,7 +38,8 @@ export default function useGetPoolsAndClosures() {
     poolClosuresGroupedByPoolID[c.pool_id] = c
   })
   const poolsGroupedByCentreID: { [centreID: number]: Pool } = {}
-  pools.forEach((p) => {
+  const vancouverPools = pools.filter((p) => p.municipality_id === 1)
+  vancouverPools.forEach((p) => {
     poolsGroupedByCentreID[p.center_id] = p
   })
 

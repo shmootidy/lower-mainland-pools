@@ -14,6 +14,7 @@ export interface Pool {
   notes: string | null
   url: string | null
   center_id: number
+  municipality_id: number // probably better to return string and join the tables in the query, but we'll do this for now
 }
 
 export function useGetPools() {
@@ -42,9 +43,9 @@ export function useGetPools() {
   }
 }
 
-export function useGetPoolsByID(poolID: number[]) {
-  async function getPoolsByID() {
-    const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolID=${poolID}`)
+export function useGetPoolByID(poolID: number | null) {
+  async function getPoolByID() {
+    const res = await fetch(`${VERCEL_URL}/getPoolByID?poolID=${poolID}`)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -52,18 +53,18 @@ export function useGetPoolsByID(poolID: number[]) {
   }
 
   const {
-    data: poolsByID = [],
-    isLoading: poolsByIDLoading,
-    isError: poolsByIDError,
-  } = useQuery<Pool[]>({
+    data: poolByID,
+    isLoading: poolByIDLoading,
+    isError: poolByIDError,
+  } = useQuery<Pool>({
     queryKey: [`poolID:${poolID}`],
-    queryFn: getPoolsByID,
-    enabled: !!poolID.length,
+    queryFn: getPoolByID,
+    enabled: !!poolID,
   })
 
   return {
-    poolsByID,
-    poolsByIDLoading,
-    poolsByIDError,
+    poolByID,
+    poolByIDLoading,
+    poolByIDError,
   }
 }
