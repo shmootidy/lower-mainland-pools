@@ -19,6 +19,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
+import { useGetRichmondPDFTEMP } from '../APIs/richmondPoolCalendarAPI'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -30,6 +31,9 @@ export default function Pool() {
   const centreID = poolsByID[0]?.center_id
   const { poolCalendar, poolCalendarLoading, poolCalendarError } =
     useGetVancouverPoolCalendarByCentreID(centreID)
+
+  const { richmondPdfData, richmondPdfDataLoading, richmondPdfDataError } =
+    useGetRichmondPDFTEMP()
 
   const [filteredEventCategories, setFilteredEventCategories] = useState<
     Omit<CheckboxProps, 'onToggleChecked'>[]
@@ -172,6 +176,18 @@ export default function Pool() {
             </table>
           </>
         </StateManager>
+        <div>
+          {richmondPdfDataLoading ? (
+            <div>pdf loading...</div>
+          ) : (
+            <embed
+              src={richmondPdfData ? URL.createObjectURL(richmondPdfData) : ''}
+              width='600'
+              height='800'
+              type='application/pdf'
+            />
+          )}
+        </div>
       </div>
     </StateManager>
   )

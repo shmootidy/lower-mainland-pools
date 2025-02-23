@@ -42,9 +42,9 @@ export function useGetPools() {
   }
 }
 
-export function useGetPoolsByID(poolIDs: number[]) {
+export function useGetPoolsByID(poolID: number[]) {
   async function getPoolsByID() {
-    const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolIDs=${poolIDs}`)
+    const res = await fetch(`${VERCEL_URL}/getPoolsByID?poolID=${poolID}`)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -56,9 +56,9 @@ export function useGetPoolsByID(poolIDs: number[]) {
     isLoading: poolsByIDLoading,
     isError: poolsByIDError,
   } = useQuery<Pool[]>({
-    queryKey: [`poolIDs:${poolIDs}`],
+    queryKey: [`poolID:${poolID}`],
     queryFn: getPoolsByID,
-    enabled: !!poolIDs.length,
+    enabled: !!poolID.length,
   })
 
   return {
