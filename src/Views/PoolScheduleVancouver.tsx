@@ -18,12 +18,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 interface IProps {
-  selectedPool: Pool
+  selectedPool?: Pool
 }
 
 export default function PoolScheduleValue(props: IProps) {
   const { selectedPool } = props
-  const centreID = selectedPool.center_id
+  const centreID = selectedPool?.center_id
   const { poolCalendar, poolCalendarLoading, poolCalendarError } =
     useGetVancouverPoolCalendarByCentreID(centreID)
 

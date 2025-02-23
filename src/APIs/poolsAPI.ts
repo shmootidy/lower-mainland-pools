@@ -3,11 +3,14 @@ import { useQuery } from '@tanstack/react-query'
 import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
+interface Municipality {
+  id: number
+  name: string
+}
 export interface Pool {
   id: number
   address: string | null
   coordinates: { x: number; y: number } | null
-  created_date: string
   amenities: string[]
   locker_type: string | null
   name: string
@@ -15,6 +18,7 @@ export interface Pool {
   url: string | null
   center_id: number
   municipality_id: number // probably better to return string and join the tables in the query, but we'll do this for now
+  municipalities: Municipality
 }
 
 export function useGetPools() {

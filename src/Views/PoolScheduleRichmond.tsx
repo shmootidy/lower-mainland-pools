@@ -1,9 +1,17 @@
-import { useGetRichmondPDFTEMP } from '../APIs/richmondPoolCalendarAPI'
+import { Pool } from '../APIs/poolsAPI'
+import { useGetRichmondPDF } from '../APIs/richmondPoolCalendarAPI'
 import StateManager from '../Components/StateManager'
 
-export default function PoolScheduleRichmond() {
+interface IProps {
+  selectedPool?: Pool
+}
+
+export default function PoolScheduleRichmond(props: IProps) {
+  const { selectedPool } = props
+  const poolName = selectedPool?.name
+
   const { richmondPdfData, richmondPdfDataLoading, richmondPdfDataError } =
-    useGetRichmondPDFTEMP()
+    useGetRichmondPDF(poolName)
 
   return (
     <StateManager

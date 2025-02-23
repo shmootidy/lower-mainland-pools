@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 
 import CleanestPools from './CleanestPools'
 import { useGetPoolByID } from '../APIs/poolsAPI'
-import PoolScheduleValue from './PoolScheduleVancouver'
+import PoolScheduleVancouver from './PoolScheduleVancouver'
 import StateManager from '../Components/StateManager'
 import PoolScheduleRichmond from './PoolScheduleRichmond'
 
@@ -22,11 +22,13 @@ export default function Pool() {
     )
   }
 
+  const poolMunicipalityName = poolByID?.municipalities.name
+
   return (
     <StateManager
-      isLoading={poolByIDLoading} //  || poolCalendarLoading}
-      hasError={poolByIDError} //  || poolCalendarError}
-      noData={!poolByID} //  || !filteredEvents?.length}
+      isLoading={poolByIDLoading}
+      hasError={poolByIDError}
+      noData={!poolByID}
     >
       <div>
         <Link to='/'>back</Link>
@@ -38,8 +40,13 @@ export default function Pool() {
           })}
         </ul>
         <hr />
-        {poolByID ? <PoolScheduleValue selectedPool={poolByID} /> : null}
-        <PoolScheduleRichmond />
+        {poolMunicipalityName === 'Vancouver' ? (
+          <PoolScheduleVancouver selectedPool={poolByID} />
+        ) : null}
+        {poolMunicipalityName === 'Richmond' ? (
+          <PoolScheduleRichmond selectedPool={poolByID} />
+        ) : null}
+        <PoolScheduleRichmond selectedPool={poolByID} />
       </div>
     </StateManager>
   )
