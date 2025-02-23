@@ -21,7 +21,7 @@ export interface VancouverPoolCalendar {
   events: PoolEvent[]
 }
 
-interface RichmondPoolCalendar {
+export interface RichmondPoolCalendar {
   [poolName: string]: {
     [days: string]: string
   }

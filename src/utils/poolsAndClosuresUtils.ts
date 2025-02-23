@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { OpenStatus, ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 import { FilteredEvent } from './poolsUtils'
 import { PoolClosure } from '../APIs/poolClosuresAPI'
+import { RichmondPoolCalendar } from '../APIs/vancouverPoolCalendarsAPI'
 
 export function getReasonForClosure(
   reasonForClosure?: string | null,
