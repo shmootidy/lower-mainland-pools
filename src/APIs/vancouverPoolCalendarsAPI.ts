@@ -4,32 +4,21 @@ import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 export interface PoolEvent {
-  activity_detail_url: string
+  activity_detail_url?: string
   end_time: string
-  price: {
+  price?: {
     estimate_price: string
   }
   start_time: string
   title: string
-  event_item_id: number
+  event_item_id?: number
 }
 
-export interface VancouverPoolCalendar {
-  center_id: number
+export interface PoolCalendar {
+  center_id?: number
   center_name: string
-  total: number
+  total?: number
   events: PoolEvent[]
-}
-
-export interface RichmondPoolCalendar {
-  [poolName: string]: {
-    [days: string]: string
-  }
-}
-
-export interface PoolCalendars {
-  Vancouver: VancouverPoolCalendar[]
-  Richmond: RichmondPoolCalendar[]
 }
 
 // not just vancouver anymore
@@ -43,10 +32,10 @@ export function useGetVancouverPoolCalendars() {
   }
 
   const {
-    data: poolCalendars = { Vancouver: [], Richmond: [] },
+    data: poolCalendars = [], // = { Vancouver: [], Richmond: [] },
     isLoading: poolCalendarsLoading,
     isError: poolCalendarsError,
-  } = useQuery<PoolCalendars>({
+  } = useQuery<PoolCalendar[]>({
     ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolCalendars'],
     queryFn: getVancouverPoolCalendars,
@@ -74,7 +63,7 @@ export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
     data: poolCalendar = null,
     isLoading: poolCalendarLoading,
     isError: poolCalendarError,
-  } = useQuery<VancouverPoolCalendar>({
+  } = useQuery<PoolCalendar>({
     ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolCalendar', `${centreID}`],
     queryFn: getVancouverPoolCalendars,

@@ -10,10 +10,11 @@ export default function Pool() {
   const [searchParams] = useSearchParams()
   const poolID = searchParams.get('poolID')
 
-  const { poolByID, poolByIDLoading, poolByIDError } = useGetPoolByID(
-    poolID ? Number(poolID) : null,
-  )
-
+  const {
+    poolByID: pool,
+    poolByIDLoading,
+    poolByIDError,
+  } = useGetPoolByID(poolID ? Number(poolID) : null)
   if (!poolID) {
     return (
       <>
@@ -22,7 +23,9 @@ export default function Pool() {
     )
   }
 
-  const poolMunicipalityName = poolByID?.municipalities.name
+  const poolByID = pool?.[0]
+  const poolMunicipalityName =
+    poolByID?.municipality_id === 1 ? 'Vancouver' : 'Richmond'
 
   return (
     <StateManager
@@ -46,7 +49,6 @@ export default function Pool() {
         {poolMunicipalityName === 'Richmond' ? (
           <PoolScheduleRichmond selectedPool={poolByID} />
         ) : null}
-        <PoolScheduleRichmond selectedPool={poolByID} />
       </div>
     </StateManager>
   )
