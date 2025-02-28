@@ -1,10 +1,10 @@
 import { Link, useSearchParams } from 'react-router-dom'
 
-import CleanestPools from './CleanestPools'
 import { useGetPoolByID } from '../APIs/poolsAPI'
 import PoolScheduleVancouver from './PoolScheduleVancouver'
 import StateManager from '../Components/StateManager'
 import PoolScheduleRichmond from './PoolScheduleRichmond'
+import PoolsOverview from './PoolsOverview'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -18,7 +18,7 @@ export default function Pool() {
   if (!poolID) {
     return (
       <>
-        <CleanestPools />
+        <PoolsOverview />
       </>
     )
   }
