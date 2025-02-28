@@ -21,10 +21,11 @@ export interface PoolCalendar {
   events: PoolEvent[]
 }
 
-// not just vancouver anymore
+// useFetch for endpoint calls
+// not just vancouver anymore -- but it should be. if Richmond breaks, then the app will crash
 export function useGetVancouverPoolCalendars() {
   async function getVancouverPoolCalendars() {
-    const res = await fetch(`${VERCEL_URL}/getPoolSchedules`)
+    const res = await fetch(`${VERCEL_URL}/getVancouverPoolSchedules`)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -32,19 +33,19 @@ export function useGetVancouverPoolCalendars() {
   }
 
   const {
-    data: poolCalendars = [], // = { Vancouver: [], Richmond: [] },
-    isLoading: poolCalendarsLoading,
-    isError: poolCalendarsError,
+    data: vancouverPoolCalendars = [], // = { Vancouver: [], Richmond: [] },
+    isLoading: vancouverPoolCalendarsLoading,
+    isError: vancouverPoolCalendarsError,
   } = useQuery<PoolCalendar[]>({
     ...DEFAULT_COMMON_API_CONFIG,
-    queryKey: ['poolCalendars'],
+    queryKey: ['vancouverPoolCalendars'],
     queryFn: getVancouverPoolCalendars,
   })
 
   return {
-    poolCalendars,
-    poolCalendarsLoading,
-    poolCalendarsError,
+    vancouverPoolCalendars,
+    vancouverPoolCalendarsLoading,
+    vancouverPoolCalendarsError,
   }
 }
 

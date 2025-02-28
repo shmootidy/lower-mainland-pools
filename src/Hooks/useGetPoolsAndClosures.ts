@@ -11,28 +11,30 @@ import {
   getNextPoolOpenDate,
   getReasonForClosure,
   getPoolOpenStatus,
+  convertPoolCalendarDataIntoPoolsAndClosures,
 } from '../utils/poolsAndClosuresUtils'
+import { useGetRichmondPoolCalendars } from '../APIs/richmondPoolCalendarsAPI'
 
 export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
 export type OpenStatus = 'open' | 'closed' | 'mismatch'
 
-interface PoolsAndClosures {
-  poolName: string
-  nextPoolOpenDate: string | null
-  reasonForClosure: ReasonForClosure
-  poolID: number
-  poolUrl: string
-  lastClosedForCleaningReopenDate: string | null
-  openStatus: OpenStatus
-}
-
+// useGet for.... i don't know, maybe hooks shouldn't be useGet
 export default function useGetPoolsAndClosures() {
   const { poolClosures, poolClosuresLoading, poolClosuresError } =
     useGetPoolClosures()
   const { pools, poolsLoading, poolsError } = useGetPools()
 
-  const { poolCalendars, poolCalendarsLoading, poolCalendarsError } =
-    useGetVancouverPoolCalendars()
+  const {
+    vancouverPoolCalendars,
+    vancouverPoolCalendarsLoading,
+    vancouverPoolCalendarsError,
+  } = useGetVancouverPoolCalendars()
+
+  const {
+    richmondPoolCalendars,
+    richmondPoolCalendarsLoading,
+    richmondPoolCalendarsError,
+  } = useGetRichmondPoolCalendars()
 
   const poolClosuresGroupedByPoolID: { [poolID: number]: PoolClosure } = {}
   poolClosures.forEach((c) => {
@@ -45,39 +47,46 @@ export default function useGetPoolsAndClosures() {
     poolsGroupedByPoolName[p.name] = p
   })
 
-  const now = DateTime.now()
+  // const now = DateTime.now()
 
-  const isLoading = poolClosuresLoading || poolsLoading || poolCalendarsLoading
-  const hasError = poolClosuresError || poolCalendarsError || poolsError
+  const isLoading =
+    poolClosuresLoading || poolsLoading || vancouverPoolCalendarsLoading
+  const hasError =
+    poolClosuresError || vancouverPoolCalendarsError || poolsError
 
-  const poolsAndClosures: PoolsAndClosures[] =
-    !isLoading && !hasError
-      ? poolCalendars.map((c) => {
-          const pool = c.center_id
-            ? poolsGroupedByCentreID[c.center_id]
-            : poolsGroupedByPoolName[c.center_name]
-          const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
-          const todaysEvents = getFilteredPoolEventByDay(c.events, [], now)
+  // const poolsAndClosuresOLD: PoolsAndClosures[] =
+  //   !isLoading && !hasError
+  //     ? vancouverPoolCalendars.map((c) => {
+  //         const pool = c.center_id
+  //           ? poolsGroupedByCentreID[c.center_id]
+  //           : poolsGroupedByPoolName[c.center_name]
+  //         const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
+  //         const todaysEvents = getFilteredPoolEventByDay(c.events, [], now)
 
-          return {
-            poolName: pool?.name ?? 'name not found',
-            nextPoolOpenDate: getNextPoolOpenDate(
-              todaysEvents,
-              getFirstEventTomorrow(c.events, now),
-              now,
-              poolClosure,
-            ),
-            lastClosedForCleaningReopenDate:
-              poolClosure?.closure_end_date ?? null,
-            reasonForClosure: getReasonForClosure(
-              poolClosure?.reason_for_closure,
-            ),
-            poolID: pool?.id,
-            poolUrl: pool?.url ?? '',
-            openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
-          }
-        })
-      : []
+  //         return {
+  //           poolName: pool?.name ?? 'name not found',
+  //           nextPoolOpenDate: getNextPoolOpenDate(
+  //             todaysEvents,
+  //             getFirstEventTomorrow(c.events, now),
+  //             now,
+  //             poolClosure,
+  //           ),
+  //           lastClosedForCleaningReopenDate:
+  //             poolClosure?.closure_end_date ?? null,
+  //           reasonForClosure: getReasonForClosure(
+  //             poolClosure?.reason_for_closure,
+  //           ),
+  //           poolID: pool?.id,
+  //           poolUrl: pool?.url ?? '',
+  //           openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
+  //         }
+  //       })
+  //     : []
+  const poolsAndClosures = convertPoolCalendarDataIntoPoolsAndClosures(
+    poolClosures,
+    [...vancouverPoolCalendars, ...richmondPoolCalendars],
+    pools,
+  )
 
   return {
     isLoading,

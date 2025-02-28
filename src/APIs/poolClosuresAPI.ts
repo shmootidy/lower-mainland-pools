@@ -13,6 +13,7 @@ export interface PoolClosure {
   closure_start_date: string | null
 }
 
+// useGet for database calls
 export function useGetPoolClosures() {
   async function getPoolClosures() {
     const res = await fetch(`${VERCEL_URL}/getPoolClosures`)
