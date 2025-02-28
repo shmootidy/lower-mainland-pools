@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import { OpenStatus, ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
 import {
   FilteredEvent,
   getFilteredPoolEventByDay,
@@ -8,6 +7,9 @@ import {
 import { PoolClosure } from '../APIs/poolClosuresAPI'
 import { PoolCalendar } from '../APIs/vancouverPoolCalendarsAPI'
 import { Pool } from '../APIs/poolsAPI'
+
+export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
+export type OpenStatus = 'open' | 'closed' | 'mismatch'
 
 export function getReasonForClosure(
   reasonForClosure?: string | null,
