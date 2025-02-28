@@ -94,7 +94,7 @@ export default function PoolRow(props: IProps) {
           </>
         </StateManager>
       </TableData>
-      <TableData>
+      <TableData style={{ paddingRight: 0 }}>
         {pool.url ? (
           <a href={pool.url} target='_blank' rel='noopener noreferrer'>
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
