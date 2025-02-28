@@ -1,14 +1,7 @@
 import { DateTime } from 'luxon'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
-import {
-  getPoolStatusIcon,
-  OPEN_STATUS_ICON_MAP,
-} from '../utils/cleanPoolsUtils'
 import StateManager from '../Components/StateManager'
-import { TableData, TableHeader } from '../Components/StyledComponents'
+import { TableHeader } from '../Components/StyledComponents'
 import { useGetPoolClosures } from '../APIs/poolClosuresAPI'
 import { useGetPools } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
