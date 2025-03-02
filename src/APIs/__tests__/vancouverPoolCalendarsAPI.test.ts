@@ -15,10 +15,10 @@ describe('vancouverPoolCalendarsAPI', () => {
       })
 
       await waitFor(() =>
-        expect(result.current.poolCalendarsLoading).toBeFalsy()
+        expect(result.current.vancouverPoolCalendarsLoading).toBeFalsy(),
       )
 
-      expect(result.current.poolCalendars).toEqual(mockPoolCalendars)
+      expect(result.current.vancouverPoolCalendars).toEqual(mockPoolCalendars)
     })
   })
 
@@ -28,11 +28,11 @@ describe('vancouverPoolCalendarsAPI', () => {
         () => useGetVancouverPoolCalendarByCentreID(12),
         {
           wrapper,
-        }
+        },
       )
 
       await waitFor(() =>
-        expect(result.current.poolCalendarLoading).toBeFalsy()
+        expect(result.current.poolCalendarLoading).toBeFalsy(),
       )
 
       expect(result.current.poolCalendar).toEqual(mockPoolCalendars[0])

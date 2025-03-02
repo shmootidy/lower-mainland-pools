@@ -22,7 +22,6 @@ export interface PoolCalendar {
 }
 
 // useFetch for endpoint calls
-// not just vancouver anymore -- but it should be. if Richmond breaks, then the app will crash
 export function useGetVancouverPoolCalendars() {
   async function getVancouverPoolCalendars() {
     const res = await fetch(`${VERCEL_URL}/getVancouverPoolSchedules`)
@@ -33,7 +32,7 @@ export function useGetVancouverPoolCalendars() {
   }
 
   const {
-    data: vancouverPoolCalendars = [], // = { Vancouver: [], Richmond: [] },
+    data: vancouverPoolCalendars = [],
     isLoading: vancouverPoolCalendarsLoading,
     isError: vancouverPoolCalendarsError,
   } = useQuery<PoolCalendar[]>({

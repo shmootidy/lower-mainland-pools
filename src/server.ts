@@ -20,7 +20,7 @@ const handlers = [
     }
     return HttpResponse.json(mockPools)
   }),
-  http.get(`${VERCEL_URL}/getPoolSchedules`, () => {
+  http.get(`${VERCEL_URL}/getVancouverPoolSchedules`, () => {
     return HttpResponse.json(mockPoolCalendars)
   }),
   http.get(`${VERCEL_URL}/getPoolScheduleByCentreID`, () => {

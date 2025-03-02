@@ -14,14 +14,18 @@ describe('poolsUtils', () => {
   const mockNow = DateTime.fromISO(MOCK_CURRENT_DATE_TIME_STRING)
   describe('getFilteredPoolEventByDay', () => {
     it('returns all events for today if no filtered events are passed', () => {
-      expect(getFilteredPoolEventByDay(mockPoolEvents, [], mockNow)).toEqual(
-        mockFilteredEvents.slice(0, 3)
-      )
+      expect(
+        getFilteredPoolEventByDay({ poolEvents: mockPoolEvents, now: mockNow }),
+      ).toEqual(mockFilteredEvents.slice(0, 3))
     })
 
     it('returns events for today, filtered by category', () => {
       expect(
-        getFilteredPoolEventByDay(mockPoolEvents, ['event 1'], mockNow)
+        getFilteredPoolEventByDay({
+          poolEvents: mockPoolEvents,
+          filteredEventCategories: ['event 1'],
+          now: mockNow,
+        }),
       ).toEqual([mockFilteredEvents[0]])
     })
   })

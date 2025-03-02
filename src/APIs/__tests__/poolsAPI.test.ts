@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react'
 
 import { wrapper } from '../../testUtils'
-import { useGetPools, useGetPoolsByID } from '../poolsAPI'
+import { useGetPools, useGetPoolByID } from '../poolsAPI'
 import { mockPools } from '../../testData'
 
 describe('poolsAPI', () => {
@@ -17,11 +17,11 @@ describe('poolsAPI', () => {
 
   describe('useGetPoolsByID', () => {
     it('returns pool data', async () => {
-      const { result } = renderHook(() => useGetPoolsByID([1]), { wrapper })
+      const { result } = renderHook(() => useGetPoolByID(1), { wrapper })
 
-      await waitFor(() => expect(result.current.poolsByIDLoading).toBeFalsy())
+      await waitFor(() => expect(result.current.poolByIDLoading).toBeFalsy())
 
-      expect(result.current.poolsByID).toEqual(mockPools)
+      expect(result.current.poolByID).toEqual(mockPools)
     })
   })
 })
