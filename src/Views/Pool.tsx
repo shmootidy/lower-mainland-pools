@@ -6,6 +6,8 @@ import PoolScheduleVancouver from './PoolScheduleVancouver'
 import StateManager from '../Components/StateManager'
 import PoolScheduleRichmond from './PoolScheduleRichmond'
 import PoolsOverview from './PoolsOverview'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAddressBook, faPhone } from '@fortawesome/free-solid-svg-icons'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -37,7 +39,19 @@ export default function Pool() {
     >
       <div>
         <Link to='/'>back</Link>
-        <h1>{poolByID?.name}</h1>
+        <h1 style={{ marginBottom: 8 }}>{poolByID?.name}</h1>
+        {poolByID?.address ? (
+          <div style={{ fontSize: 12 }}>
+            <FontAwesomeIcon icon={faAddressBook} style={{ marginRight: 14 }} />
+            {poolByID?.address}
+          </div>
+        ) : null}
+        {poolByID?.phone ? (
+          <a href={`tel:${poolByID?.phone}`} style={{ fontSize: 12 }}>
+            <FontAwesomeIcon icon={faPhone} style={{ marginRight: 14 }} />
+            {poolByID?.phone}
+          </a>
+        ) : null}
         <h2>Amenities</h2>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
           {poolByID?.amenities.map((a, i) => {

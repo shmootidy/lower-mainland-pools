@@ -13,8 +13,8 @@ export interface Pool {
   notes: string | null
   url: string | null
   center_id: number
-  municipality_id: number // probably better to return string and join the tables in the query, but we'll do this for now
   municipality: string
+  phone: string
 }
 
 export function useGetPools() {
