@@ -20,12 +20,19 @@ export interface FilteredEvent extends PoolEvent {
   timeline: EventTimeline
 }
 
-export function getFilteredPoolEventByDay(
-  poolEvents: PoolEvent[],
-  filteredEventCategories: string[],
-  now: DateTime<boolean>,
-  daysInFuture = 0,
-) {
+export function getFilteredPoolEventByDay(args: {
+  poolEvents: PoolEvent[]
+  filteredEventCategories?: string[]
+  now: DateTime<boolean>
+  daysInFuture?: number
+}) {
+  const {
+    poolEvents,
+    filteredEventCategories = [],
+    now,
+    daysInFuture = 0,
+  } = args
+
   const filteredEvents: FilteredEvent[] = poolEvents
     .filter((e) => {
       const isToday = DateTime.fromSQL(e.start_time)
@@ -101,13 +108,4 @@ function sortFilteredPoolEvents(
     }
     return bDate - aDate
   })
-}
-
-export function getPoolHeadingText(filteredEvent: FilteredEvent | null) {
-  if (!filteredEvent) {
-    return null
-  }
-  return `Schedule: ${DateTime.fromSQL(filteredEvent.start_time).toFormat(
-    'ccc d',
-  )}`
 }

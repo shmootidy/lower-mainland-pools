@@ -1,13 +1,13 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 
 import './App.css'
-import CleanestPools from './Views/CleanestPools'
 import Pool from './Views/Pool'
+import PoolsOverview from './Views/PoolsOverview'
 
 const router = createHashRouter([
   {
     path: '/',
-    element: <CleanestPools />,
+    element: <PoolsOverview />,
   },
   {
     path: '/pool',

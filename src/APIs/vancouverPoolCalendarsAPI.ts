@@ -4,26 +4,28 @@ import VERCEL_URL from '../utils/apiUrls'
 import { DEFAULT_COMMON_API_CONFIG } from '../utils/apiUtils'
 
 export interface PoolEvent {
-  activity_detail_url: string
+  activity_detail_url?: string
   end_time: string
-  price: {
+  price?: {
     estimate_price: string
   }
   start_time: string
   title: string
-  event_item_id: number
+  event_item_id?: number
 }
 
-export interface VancouverPoolCalendar {
-  center_id: number
+export interface PoolCalendar {
+  center_id?: number
   center_name: string
-  total: number
+  total?: number
   events: PoolEvent[]
 }
 
+// useFetch for endpoint calls
+// not just vancouver anymore -- but it should be. if Richmond breaks, then the app will crash
 export function useGetVancouverPoolCalendars() {
   async function getVancouverPoolCalendars() {
-    const res = await fetch(`${VERCEL_URL}/getPoolSchedules`)
+    const res = await fetch(`${VERCEL_URL}/getVancouverPoolSchedules`)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -31,19 +33,19 @@ export function useGetVancouverPoolCalendars() {
   }
 
   const {
-    data: poolCalendars = [],
-    isLoading: poolCalendarsLoading,
-    isError: poolCalendarsError,
-  } = useQuery<VancouverPoolCalendar[]>({
+    data: vancouverPoolCalendars = [], // = { Vancouver: [], Richmond: [] },
+    isLoading: vancouverPoolCalendarsLoading,
+    isError: vancouverPoolCalendarsError,
+  } = useQuery<PoolCalendar[]>({
     ...DEFAULT_COMMON_API_CONFIG,
-    queryKey: ['poolCalendars'],
+    queryKey: ['vancouverPoolCalendars'],
     queryFn: getVancouverPoolCalendars,
   })
 
   return {
-    poolCalendars,
-    poolCalendarsLoading,
-    poolCalendarsError,
+    vancouverPoolCalendars,
+    vancouverPoolCalendarsLoading,
+    vancouverPoolCalendarsError,
   }
 }
 
@@ -62,7 +64,7 @@ export function useGetVancouverPoolCalendarByCentreID(centreID?: number) {
     data: poolCalendar = null,
     isLoading: poolCalendarLoading,
     isError: poolCalendarError,
-  } = useQuery<VancouverPoolCalendar>({
+  } = useQuery<PoolCalendar>({
     ...DEFAULT_COMMON_API_CONFIG,
     queryKey: ['poolCalendar', `${centreID}`],
     queryFn: getVancouverPoolCalendars,

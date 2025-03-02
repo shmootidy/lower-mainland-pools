@@ -15,8 +15,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { DateTime } from 'luxon'
-
-import { ReasonForClosure } from '../Hooks/useGetPoolsAndClosures'
+import { ReasonForClosure } from './poolsAndClosuresUtils'
 
 interface IconAndColorMap {
   [key: string]: {
@@ -28,7 +27,7 @@ interface IconAndColorMap {
 export function getPoolStatusIcon(
   poolLastCleanedDate: string | null,
   reasonForClosure: ReasonForClosure,
-  now: DateTime<boolean>
+  now: DateTime<boolean>,
 ) {
   if (!poolLastCleanedDate) {
     return ICON_AND_COLOR_MAP['unknown']

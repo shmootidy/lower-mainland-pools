@@ -3,6 +3,11 @@
   margin: 0 auto;
   padding: 2rem;
 }
+@media (max-width: 525px) {
+  #root {
+    padding: 0.5rem;
+  }
+}
 
 .logo {
   height: 6em;
