@@ -4,12 +4,12 @@ import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 
 export default function useGetThisWeeksPoolTimes() {
   const {
-    poolCalendars: cals,
-    poolCalendarsLoading,
-    poolCalendarsError,
+    vancouverPoolCalendars,
+    vancouverPoolCalendarsLoading,
+    vancouverPoolCalendarsError,
   } = useGetVancouverPoolCalendars()
 
-  const poolCalendars = cals.Vancouver
+  // const poolCalendars = cals.Vancouver
   const now = DateTime.now()
   const oneWeekFromNow = now.plus({ weeks: 1 })
 
@@ -23,7 +23,7 @@ export default function useGetThisWeeksPoolTimes() {
     'Leisure Lane',
   ]
 
-  const filteredPoolTimes = poolCalendars.map((pool) => {
+  const filteredPoolTimes = vancouverPoolCalendars.map((pool) => {
     return {
       ...pool,
       center_name: stripPoolNameOfAsterisk(pool.center_name),
@@ -57,8 +57,8 @@ export default function useGetThisWeeksPoolTimes() {
 
   return {
     filteredPoolTimes,
-    filteredPoolTimesLoading: poolCalendarsLoading,
-    filteredPoolTimesError: poolCalendarsError,
+    filteredPoolTimesLoading: vancouverPoolCalendarsLoading,
+    filteredPoolTimesError: vancouverPoolCalendarsError,
   }
 }
 

@@ -12,9 +12,9 @@ export interface Pool {
   name: string
   notes: string | null
   url: string | null
-  center_id: number
+  center_id?: number
   municipality: string
-  phone: string
+  phone?: string
 }
 
 export function useGetPools() {

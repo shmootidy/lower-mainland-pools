@@ -101,7 +101,9 @@ export function convertPoolCalendarDataIntoPoolsAndClosures(
   const poolsGroupedByCentreID: { [centreID: number]: Pool } = {}
   const poolsGroupedByPoolName: Record<string, Pool> = {}
   pools.forEach((p) => {
-    poolsGroupedByCentreID[p.center_id] = p
+    if (p.center_id) {
+      poolsGroupedByCentreID[p.center_id] = p
+    }
     poolsGroupedByPoolName[p.name] = p
   })
 

@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import { PoolClosure } from './APIs/poolClosuresAPI'
 import { Pool } from './APIs/poolsAPI'
-import { VancouverPoolCalendar } from './APIs/vancouverPoolCalendarsAPI'
+import { PoolCalendar } from './APIs/vancouverPoolCalendarsAPI'
 import { FilteredEvent } from './utils/poolsUtils'
 
 export const MOCK_CURRENT_DATE_TIME_STRING = '2025-01-01T12:00:00'
@@ -42,37 +42,48 @@ export const mockPools: Pool[] = [
     id: 1,
     address: null,
     coordinates: null,
-    created_date: '',
     amenities: ['pool', 'slide'],
     locker_type: null,
     name: 'Pool 1',
     notes: null,
     url: null,
     center_id: 11,
+    municipality: 'Vancouver,',
   },
   {
     id: 2,
     address: null,
     coordinates: null,
-    created_date: '',
     amenities: ['pool', 'slide'],
     locker_type: null,
     name: 'Pool 2',
     notes: null,
     url: null,
     center_id: 22,
+    municipality: 'Vancouver,',
   },
   {
     id: 3,
     address: null,
     coordinates: null,
-    created_date: '',
     amenities: ['pool', 'slide'],
     locker_type: null,
     name: 'Pool 3',
     notes: null,
     url: null,
     center_id: 33,
+    municipality: 'Vancouver,',
+  },
+  {
+    id: 4,
+    address: null,
+    coordinates: null,
+    amenities: ['pool', 'slide'],
+    locker_type: null,
+    name: 'Pool 4',
+    notes: null,
+    url: null,
+    municipality: 'Richmond,',
   },
 ]
 
@@ -184,7 +195,7 @@ const allDayClosureEvent = {
   event_item_id: 1,
 }
 
-export const mockPoolCalendars: VancouverPoolCalendar[] = [
+export const mockPoolCalendars: PoolCalendar[] = [
   {
     center_id: mockPools[0].center_id,
     center_name: mockPools[0].name,
