@@ -17,6 +17,7 @@ interface IProps {
 export default function PoolScheduleRichmond(props: IProps) {
   const { selectedPool, now } = props
   const poolName = selectedPool?.name
+  const poolUrl = selectedPool?.url
 
   const [daysInFuture, setDaysInFuture] = useState(0)
 
@@ -68,8 +69,17 @@ export default function PoolScheduleRichmond(props: IProps) {
         noData={!richmondPdfData}
       >
         <object data={pdfUrl} type='application/pdf' height='800' width='600'>
+          <p>Your browser doesn't support PDFs.</p>
           <p>
-            Your browser doesn't support PDFs. <a href={pdfUrl}>Download it.</a>
+            You can try{' '}
+            <a href={pdfUrl}>{`downloading the ${poolName} schedule`}</a>{' '}
+            {poolUrl ? (
+              <span>
+                or <a href={poolUrl}>visiting the website directly.</a>
+              </span>
+            ) : (
+              '.'
+            )}
           </p>
         </object>
       </StateManager>
