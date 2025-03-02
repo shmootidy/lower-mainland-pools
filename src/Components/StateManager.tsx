@@ -6,10 +6,12 @@ interface IProps {
   noData: boolean
   children: ReactElement
   isCompact?: boolean
+  errorMessage?: ReactElement
 }
 
 export default function StateManager(props: IProps) {
-  const { isLoading, hasError, children, noData, isCompact } = props
+  const { isLoading, hasError, children, noData, isCompact, errorMessage } =
+    props
 
   if (isLoading) {
     return (
@@ -19,6 +21,9 @@ export default function StateManager(props: IProps) {
     )
   }
   if (hasError) {
+    if (errorMessage) {
+      return errorMessage
+    }
     return (
       <div data-testid={`${!isCompact ? '' : 'compact-'}error`}>
         {!isCompact ? 'Oh no! Something went terrible wrong.' : '!'}

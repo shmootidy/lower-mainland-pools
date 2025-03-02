@@ -67,6 +67,18 @@ export default function PoolScheduleRichmond(props: IProps) {
         isLoading={richmondPdfDataLoading}
         hasError={richmondPdfDataError}
         noData={!richmondPdfData}
+        errorMessage={
+          <>
+            <p>There was a problem finding the schedule PDF url.</p>
+            {poolUrl ? (
+              <p>
+                <a href={poolUrl} target='_blank' rel='noopener noreferrer'>
+                  Visit the pool website directly.
+                </a>
+              </p>
+            ) : null}
+          </>
+        }
       >
         <object data={pdfUrl} type='application/pdf' height='800' width='600'>
           <p>Your browser doesn't support PDFs.</p>
@@ -75,7 +87,10 @@ export default function PoolScheduleRichmond(props: IProps) {
             <a href={pdfUrl}>{`downloading the ${poolName} schedule`}</a>{' '}
             {poolUrl ? (
               <span>
-                or <a href={poolUrl}>visiting the website directly.</a>
+                or{' '}
+                <a href={poolUrl} target='_blank' rel='noopener noreferrer'>
+                  visiting the website directly.
+                </a>
               </span>
             ) : (
               '.'
