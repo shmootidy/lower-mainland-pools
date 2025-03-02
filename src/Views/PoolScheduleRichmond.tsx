@@ -29,7 +29,7 @@ export default function PoolScheduleRichmond(props: IProps) {
   const { richmondPdfData, richmondPdfDataLoading, richmondPdfDataError } =
     useGetRichmondPDF(poolName)
 
-  // this prevents a visual rerendering of the <embed> node
+  // this prevents a visual rerendering of the <object>
   const pdfUrl = useMemo(
     () => (richmondPdfData ? URL.createObjectURL(richmondPdfData) : ''),
     [richmondPdfData],
@@ -67,13 +67,7 @@ export default function PoolScheduleRichmond(props: IProps) {
         hasError={richmondPdfDataError}
         noData={!richmondPdfData}
       >
-        {/* <embed src={pdfUrl} width='600' height='800' type='application/pdf' /> */}
-        <object
-          data={pdfUrl}
-          type='application/pdf'
-          height='600px'
-          width='100%'
-        >
+        <object data={pdfUrl} type='application/pdf' height='800' width='600'>
           <p>
             Your browser doesn't support PDFs. <a href={pdfUrl}>Download it.</a>
           </p>
