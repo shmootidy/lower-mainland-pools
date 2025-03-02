@@ -1,28 +1,24 @@
-import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
+import { DateTime } from 'luxon'
+
 import { Pool } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendarByCentreID } from '../APIs/vancouverPoolCalendarsAPI'
 import Checkbox, { CheckboxProps } from '../Components/Checkbox'
-import { DateTime } from 'luxon'
 import {
   EVENT_CATEGORIES,
   getFilteredPoolEventByDay,
-  getPoolHeadingText,
 } from '../utils/poolsUtils'
 import StateManager from '../Components/StateManager'
-import { TableData, TableHeader } from '../Components/StyledComponents'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons'
+import PoolScheduleDateHeader from './PoolScheduleDateHeader'
+import PoolSchedule from './PoolSchedule'
 
 interface IProps {
   selectedPool?: Pool
+  now: DateTime<boolean>
 }
 
-export default function PoolScheduleValue(props: IProps) {
-  const { selectedPool } = props
+export default function PoolScheduleVancouver(props: IProps) {
+  const { selectedPool, now } = props
   const centreID = selectedPool?.center_id
   const { poolCalendar, poolCalendarLoading, poolCalendarError } =
     useGetVancouverPoolCalendarByCentreID(centreID)
@@ -34,12 +30,11 @@ export default function PoolScheduleValue(props: IProps) {
 
   useEffect(() => {
     if (!poolCalendarLoading) {
-      const now = DateTime.now()
-      const initialFilteredEvents = getFilteredPoolEventByDay(
-        poolCalendar?.events ?? [],
-        [],
+      const initialFilteredEvents = getFilteredPoolEventByDay({
+        poolEvents: poolCalendar?.events ?? [],
+        filteredEventCategories: [],
         now,
-      )
+      })
       setFilteredEventCategories(
         Array.from(
           new Set(
@@ -56,6 +51,7 @@ export default function PoolScheduleValue(props: IProps) {
         ).map((e) => JSON.parse(e)) ?? [],
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolCalendar, poolCalendarLoading])
 
   function handleToggleCheck(eventCategory: string) {
@@ -69,12 +65,14 @@ export default function PoolScheduleValue(props: IProps) {
     })
   }
 
-  const filteredEvents = getFilteredPoolEventByDay(
-    poolCalendar?.events ?? [],
-    filteredEventCategories.filter((c) => c.isChecked).map((c) => c.label),
-    DateTime.now(),
+  const filteredEvents = getFilteredPoolEventByDay({
+    poolEvents: poolCalendar?.events ?? [],
+    filteredEventCategories: filteredEventCategories
+      .filter((c) => c.isChecked)
+      .map((c) => c.label),
+    now,
     daysInFuture,
-  )
+  })
 
   return (
     <StateManager
@@ -83,27 +81,11 @@ export default function PoolScheduleValue(props: IProps) {
       noData={!poolCalendar}
     >
       <>
-        <HeadingWrapper>
-          <button
-            onClick={() =>
-              setDaysInFuture((prev) => (prev - 1 >= 0 ? prev - 1 : 0))
-            }
-            disabled={daysInFuture === 0}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          <h2 style={{ margin: 12, textAlign: 'center' }}>
-            {getPoolHeadingText(filteredEvents ? filteredEvents[0] : null)}
-          </h2>
-          <button
-            onClick={() =>
-              setDaysInFuture((prev) => (prev + 1 <= 5 ? prev + 1 : prev))
-            }
-            disabled={daysInFuture === 5}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </HeadingWrapper>
+        <PoolScheduleDateHeader
+          now={now}
+          daysInFuture={daysInFuture}
+          onSetDaysInFuture={setDaysInFuture}
+        />
         <div style={{ marginBottom: 16 }}>
           {filteredEventCategories.map((c, i) => {
             return (
@@ -117,40 +99,8 @@ export default function PoolScheduleValue(props: IProps) {
             )
           })}
         </div>
-        <table>
-          <thead>
-            <tr>
-              <TableHeader>Event</TableHeader>
-              <TableHeader>Start</TableHeader>
-              <TableHeader>End</TableHeader>
-              <TableHeader>Now</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredEvents?.map((e, i) => {
-              const isNow = e.timeline === 'present'
-              const isPast = e.timeline === 'past'
-              return (
-                <tr key={i} style={{ color: isPast ? 'grey' : 'white' }}>
-                  <TableData>{e.title}</TableData>
-                  <TableData>{e.start.toFormat('t')}</TableData>
-                  <TableData>{e.end.toFormat('t')}</TableData>
-                  <TableData style={{ textAlign: 'center' }}>
-                    {isNow ? '---' : '|'}
-                  </TableData>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <PoolSchedule filteredEvents={filteredEvents} />
       </>
     </StateManager>
   )
 }
-
-const HeadingWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-`

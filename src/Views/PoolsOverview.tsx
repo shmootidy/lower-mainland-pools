@@ -29,7 +29,9 @@ export default function PoolsOverview() {
     richmondPoolCalendars,
     richmondPoolCalendarsLoading,
     richmondPoolCalendarsError,
-  } = useGetRichmondPoolCalendars()
+  } = useGetRichmondPoolCalendars(
+    pools.filter((p) => p.municipality === 'Richmond').map((p) => p.id),
+  )
 
   const [municipalitiesToView, setMunicipalitiesToView] = useState<
     { label: string; isChecked: boolean }[]

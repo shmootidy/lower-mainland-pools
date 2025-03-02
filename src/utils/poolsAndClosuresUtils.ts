@@ -112,7 +112,10 @@ export function convertPoolCalendarDataIntoPoolsAndClosures(
       ? poolsGroupedByCentreID[c.center_id]
       : poolsGroupedByPoolName[c.center_name]
     const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
-    const todaysEvents = getFilteredPoolEventByDay(c.events, [], now)
+    const todaysEvents = getFilteredPoolEventByDay({
+      poolEvents: c.events,
+      now,
+    })
 
     return {
       poolName: pool?.name ?? 'name not found',

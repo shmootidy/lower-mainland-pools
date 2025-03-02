@@ -51,7 +51,10 @@ export default function PoolRow(props: IProps) {
   )
 
   // subject to loading
-  const todaysEvents = getFilteredPoolEventByDay(poolEvents, [], now)
+  const todaysEvents = getFilteredPoolEventByDay({
+    poolEvents,
+    now,
+  })
   const openStatus = getPoolOpenStatus(todaysEvents, now, poolClosure)
 
   return (

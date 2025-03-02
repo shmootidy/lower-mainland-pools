@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom'
+import { DateTime } from 'luxon'
 
 import { useGetPoolByID } from '../APIs/poolsAPI'
 import PoolScheduleVancouver from './PoolScheduleVancouver'
@@ -23,6 +24,8 @@ export default function Pool() {
     )
   }
 
+  const now = DateTime.now()
+
   const poolByID = pool?.[0]
   const poolMunicipalityName = poolByID?.municipality
 
@@ -43,10 +46,10 @@ export default function Pool() {
         </ul>
         <hr />
         {poolMunicipalityName === 'Vancouver' ? (
-          <PoolScheduleVancouver selectedPool={poolByID} />
+          <PoolScheduleVancouver selectedPool={poolByID} now={now} />
         ) : null}
         {poolMunicipalityName === 'Richmond' ? (
-          <PoolScheduleRichmond selectedPool={poolByID} />
+          <PoolScheduleRichmond selectedPool={poolByID} now={now} />
         ) : null}
       </div>
     </StateManager>
