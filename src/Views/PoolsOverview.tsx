@@ -1,8 +1,12 @@
 import { DateTime } from 'luxon'
-import { useEffect, useState } from 'react'
 
+import { useEffect, useState } from 'react'
 import StateManager from '../Components/StateManager'
-import { TableHeader } from '../Components/StyledComponents'
+import {
+  ContentWrapper,
+  Table,
+  TableHeader,
+} from '../Components/StyledComponents'
 import { useGetPoolClosures } from '../APIs/poolClosuresAPI'
 import { useGetPools } from '../APIs/poolsAPI'
 import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
@@ -89,10 +93,8 @@ export default function PoolsOverview() {
             )
           })}
         </div>
-        <div
-          style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}
-        >
-          <table style={{ textAlign: 'left' }}>
+        <ContentWrapper>
+          <Table>
             <thead>
               <tr>
                 <TableHeader></TableHeader>
@@ -145,8 +147,8 @@ export default function PoolsOverview() {
                   )
                 })}
             </tbody>
-          </table>
-        </div>
+          </Table>
+        </ContentWrapper>
       </>
     </StateManager>
   )
