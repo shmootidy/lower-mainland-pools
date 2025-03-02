@@ -40,16 +40,16 @@ export default function Pool() {
       <div>
         <Link to='/'>back</Link>
         <h1 style={{ marginBottom: 8 }}>{poolByID?.name}</h1>
-        {poolByID.address ? (
+        {poolByID?.address ? (
           <div style={{ fontSize: 12 }}>
             <FontAwesomeIcon icon={faAddressBook} style={{ marginRight: 14 }} />
-            {poolByID.address}
+            {poolByID?.address}
           </div>
         ) : null}
-        {poolByID.phone ? (
-          <a href={`tel:${poolByID.phone}`} style={{ fontSize: 12 }}>
+        {poolByID?.phone ? (
+          <a href={`tel:${poolByID?.phone}`} style={{ fontSize: 12 }}>
             <FontAwesomeIcon icon={faPhone} style={{ marginRight: 14 }} />
-            {poolByID.phone}
+            {poolByID?.phone}
           </a>
         ) : null}
         <h2>Amenities</h2>
