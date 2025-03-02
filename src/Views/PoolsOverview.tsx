@@ -38,11 +38,11 @@ export default function PoolsOverview() {
   useEffect(() => {
     if (!poolsLoading) {
       const initialPoolsToView = pools
-        .map((p) => p.municipality_id)
+        .map((p) => p.municipality)
         .filter((p, i, a) => a.indexOf(p) === i)
         .map((m) => {
           return {
-            label: m === 1 ? 'Vancouver' : 'Richmond',
+            label: m,
             isChecked: true,
           }
         })
@@ -66,12 +66,12 @@ export default function PoolsOverview() {
   const showVancouverPools = !!municipalitiesToView.find(
     (m) => m.label === 'Vancouver' && m.isChecked,
   )
-  const vancouverPools = pools.filter((p) => p.municipality_id === 1)
+  const vancouverPools = pools.filter((p) => p.municipality === 'Vancouver')
 
   const showRichmondPools = !!municipalitiesToView.find(
     (m) => m.label === 'Richmond' && m.isChecked,
   )
-  const richmondPools = pools.filter((p) => p.municipality_id === 2)
+  const richmondPools = pools.filter((p) => p.municipality === 'Richmond')
 
   return (
     <StateManager

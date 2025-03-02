@@ -15,7 +15,7 @@ export function useGetRichmondPoolCalendars() {
   }
 
   const {
-    data: richmondPoolCalendars = [], // = { Vancouver: [], Richmond: [] },
+    data: richmondPoolCalendars = [],
     isLoading: richmondPoolCalendarsLoading,
     isError: richmondPoolCalendarsError,
   } = useQuery<PoolCalendar[]>({

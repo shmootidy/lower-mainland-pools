@@ -24,8 +24,7 @@ export default function Pool() {
   }
 
   const poolByID = pool?.[0]
-  const poolMunicipalityName =
-    poolByID?.municipality_id === 1 ? 'Vancouver' : 'Richmond'
+  const poolMunicipalityName = poolByID?.municipality
 
   return (
     <StateManager
