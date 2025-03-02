@@ -67,7 +67,17 @@ export default function PoolScheduleRichmond(props: IProps) {
         hasError={richmondPdfDataError}
         noData={!richmondPdfData}
       >
-        <embed src={pdfUrl} width='600' height='800' type='application/pdf' />
+        {/* <embed src={pdfUrl} width='600' height='800' type='application/pdf' /> */}
+        <object
+          data={pdfUrl}
+          type='application/pdf'
+          height='600px'
+          width='100%'
+        >
+          <p>
+            Your browser doesn't support PDFs. <a href={pdfUrl}>Download it.</a>
+          </p>
+        </object>
       </StateManager>
     </>
   )
