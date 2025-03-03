@@ -55,7 +55,11 @@ export default function PoolRow(props: IProps) {
     poolEvents,
     now,
   })
-  const openStatus = getPoolOpenStatus(todaysEvents, now, poolClosure)
+  const { openStatus, hasMismatch } = getPoolOpenStatus(
+    todaysEvents,
+    now,
+    poolClosure,
+  )
 
   return (
     <tr>
@@ -72,10 +76,19 @@ export default function PoolRow(props: IProps) {
           hasError={isCalendarError}
           noData={!poolEvents.length}
         >
-          <FontAwesomeIcon
-            style={{ color: OPEN_STATUS_ICON_MAP[openStatus].color }}
-            icon={OPEN_STATUS_ICON_MAP[openStatus].icon}
-          />
+          <>
+            <FontAwesomeIcon
+              style={{ color: OPEN_STATUS_ICON_MAP[openStatus].color }}
+              icon={OPEN_STATUS_ICON_MAP[openStatus].icon}
+            />
+            {hasMismatch ? (
+              <span title='There is a mismatch between the current event and the stored cleaning date. Check pool page for details.'>
+                *
+              </span>
+            ) : (
+              ''
+            )}
+          </>
         </StateManager>
       </TableData>
       <TableData>

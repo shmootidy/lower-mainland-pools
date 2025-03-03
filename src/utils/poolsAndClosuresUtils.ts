@@ -1,15 +1,9 @@
 import { DateTime } from 'luxon'
-import {
-  FilteredEvent,
-  getFilteredPoolEventByDay,
-  getFirstEventTomorrow,
-} from './poolsUtils'
+import { FilteredEvent } from './poolsUtils'
 import { PoolClosure } from '../APIs/poolClosuresAPI'
-import { PoolCalendar } from '../APIs/vancouverPoolCalendarsAPI'
-import { Pool } from '../APIs/poolsAPI'
 
 export type ReasonForClosure = 'annual maintenance' | 'unknown' | null
-export type OpenStatus = 'open' | 'closed' | 'mismatch'
+export type OpenStatus = 'open' | 'closed'
 
 export function getReasonForClosure(
   reasonForClosure?: string | null,
@@ -27,7 +21,10 @@ export function getPoolOpenStatus(
   todaysEvents: FilteredEvent[],
   now: DateTime<boolean>,
   poolClosure?: PoolClosure,
-): OpenStatus {
+): {
+  hasMismatch: boolean
+  openStatus: OpenStatus
+} {
   const isPoolClosedForCleaning =
     poolClosure?.closure_end_date && poolClosure?.closure_start_date
       ? DateTime.fromSQL(poolClosure.closure_end_date) > now &&
@@ -35,19 +32,20 @@ export function getPoolOpenStatus(
       : false
 
   const currentEvent = todaysEvents.filter((e) => e.timeline === 'present')
-  const currentEventIsClosure = currentEvent.every((e) =>
-    e.title.includes('Closure'),
+  const currentEventIsClosure = currentEvent.every(
+    (e) =>
+      e.title.includes('Closure') || e.title.includes('Annual Maintenance'),
   )
 
-  if (isPoolClosedForCleaning && !currentEventIsClosure) {
-    return 'mismatch'
+  return {
+    openStatus:
+      isPoolClosedForCleaning || currentEventIsClosure
+        ? 'closed'
+        : currentEvent.length
+        ? 'open'
+        : 'closed',
+    hasMismatch: isPoolClosedForCleaning && !currentEventIsClosure,
   }
-
-  if (isPoolClosedForCleaning || currentEventIsClosure) {
-    return 'closed'
-  }
-
-  return currentEvent.length ? 'open' : 'closed'
 }
 
 export function getNextPoolOpenDate(
@@ -77,63 +75,4 @@ export function getNextPoolOpenDate(
     return firstEventTomorrow.start.toFormat('ccc d t')
   }
   return null
-}
-
-interface PoolsAndClosures {
-  poolName: string
-  nextPoolOpenDate: string | null
-  reasonForClosure: ReasonForClosure
-  poolID: number
-  poolUrl: string
-  lastClosedForCleaningReopenDate: string | null
-  openStatus: OpenStatus
-}
-
-export function convertPoolCalendarDataIntoPoolsAndClosures(
-  poolClosures: PoolClosure[],
-  poolCalendars: PoolCalendar[],
-  pools: Pool[],
-) {
-  const poolClosuresGroupedByPoolID: { [poolID: number]: PoolClosure } = {}
-  poolClosures.forEach((c) => {
-    poolClosuresGroupedByPoolID[c.pool_id] = c
-  })
-  const poolsGroupedByCentreID: { [centreID: number]: Pool } = {}
-  const poolsGroupedByPoolName: Record<string, Pool> = {}
-  pools.forEach((p) => {
-    if (p.center_id) {
-      poolsGroupedByCentreID[p.center_id] = p
-    }
-    poolsGroupedByPoolName[p.name] = p
-  })
-
-  const now = DateTime.now()
-
-  const poolsAndClosures: PoolsAndClosures[] = poolCalendars.map((c) => {
-    const pool = c.center_id
-      ? poolsGroupedByCentreID[c.center_id]
-      : poolsGroupedByPoolName[c.center_name]
-    const poolClosure = poolClosuresGroupedByPoolID[pool?.id]
-    const todaysEvents = getFilteredPoolEventByDay({
-      poolEvents: c.events,
-      now,
-    })
-
-    return {
-      poolName: pool?.name ?? 'name not found',
-      nextPoolOpenDate: getNextPoolOpenDate(
-        todaysEvents,
-        getFirstEventTomorrow(c.events, now),
-        now,
-        poolClosure,
-      ),
-      lastClosedForCleaningReopenDate: poolClosure?.closure_end_date ?? null,
-      reasonForClosure: getReasonForClosure(poolClosure?.reason_for_closure),
-      poolID: pool?.id,
-      poolUrl: pool?.url ?? '',
-      openStatus: getPoolOpenStatus(todaysEvents, now, poolClosure),
-    }
-  })
-
-  return poolsAndClosures
 }
