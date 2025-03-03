@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 
 import StateManager from '../Components/StateManager'
@@ -13,6 +12,7 @@ import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
 import { useGetRichmondPoolCalendars } from '../APIs/richmondPoolCalendarsAPI'
 import PoolRow from './PoolRows'
 import Checkbox from '../Components/Checkbox'
+import { getVancouverNow } from '../utils/dateUtils'
 
 export default function PoolsOverview() {
   const { poolClosures, poolClosuresLoading, poolClosuresError } =
@@ -63,7 +63,7 @@ export default function PoolsOverview() {
     })
   }
 
-  const now = DateTime.now()
+  const now = getVancouverNow()
 
   const showVancouverPools = !!municipalitiesToView.find(
     (m) => m.label === 'Vancouver' && m.isChecked,

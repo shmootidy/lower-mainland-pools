@@ -1,5 +1,4 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { DateTime } from 'luxon'
 
 import { useGetPoolByID } from '../APIs/poolsAPI'
 import PoolScheduleVancouver from './PoolScheduleVancouver'
@@ -8,6 +7,11 @@ import PoolScheduleRichmond from './PoolScheduleRichmond'
 import PoolsOverview from './PoolsOverview'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAddressBook, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { useGetPoolClosures } from '../APIs/poolClosuresAPI'
+import { getVancouverNow } from '../utils/dateUtils'
+import { DateTime } from 'luxon'
+import { getReasonForClosure } from '../utils/poolsAndClosuresUtils'
+import { getPoolStatusIcon } from '../utils/cleanPoolsUtils'
 
 export default function Pool() {
   const [searchParams] = useSearchParams()
@@ -18,6 +22,9 @@ export default function Pool() {
     poolByIDLoading,
     poolByIDError,
   } = useGetPoolByID(poolID ? Number(poolID) : null)
+
+  const { poolClosures } = useGetPoolClosures()
+
   if (!poolID) {
     return (
       <>
@@ -26,10 +33,24 @@ export default function Pool() {
     )
   }
 
-  const now = DateTime.now()
+  const now = getVancouverNow()
 
   const poolByID = pool?.[0]
   const poolMunicipalityName = poolByID?.municipality
+  const poolClosure = poolClosures.find((c) => c.pool_id === Number(poolID))
+
+  const lastClosedForCleaningReopenDate =
+    (poolClosure?.closure_end_date &&
+      DateTime.fromSQL(poolClosure.closure_end_date)
+        .plus({ days: 1 })
+        .toISODate()) ??
+    null
+  const reasonForClosure = getReasonForClosure(poolClosure?.reason_for_closure)
+  const { icon, color } = getPoolStatusIcon(
+    lastClosedForCleaningReopenDate,
+    reasonForClosure,
+    now,
+  )
 
   return (
     <StateManager
@@ -39,7 +60,24 @@ export default function Pool() {
     >
       <div>
         <Link to='/'>back</Link>
-        <h1 style={{ marginBottom: 8 }}>{poolByID?.name}</h1>
+        <h1
+          style={{
+            marginBottom: 8,
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+          }}
+        >
+          {poolByID?.name}
+          {lastClosedForCleaningReopenDate ? (
+            <FontAwesomeIcon style={{ color, margin: 16 }} icon={icon} />
+          ) : null}
+        </h1>
+        {lastClosedForCleaningReopenDate ? (
+          <div
+            style={{ fontStyle: 'italic', textAlign: 'center' }}
+          >{`Reopens ${lastClosedForCleaningReopenDate}`}</div>
+        ) : null}
         {poolByID?.address ? (
           <div style={{ fontSize: 12 }}>
             <FontAwesomeIcon icon={faAddressBook} style={{ marginRight: 14 }} />

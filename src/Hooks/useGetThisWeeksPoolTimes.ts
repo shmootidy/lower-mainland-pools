@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 
 import { useGetVancouverPoolCalendars } from '../APIs/vancouverPoolCalendarsAPI'
+import { getVancouverNow } from '../utils/dateUtils'
 
 export default function useGetThisWeeksPoolTimes() {
   const {
@@ -9,8 +10,7 @@ export default function useGetThisWeeksPoolTimes() {
     vancouverPoolCalendarsError,
   } = useGetVancouverPoolCalendars()
 
-  // const poolCalendars = cals.Vancouver
-  const now = DateTime.now()
+  const now = getVancouverNow()
   const oneWeekFromNow = now.plus({ weeks: 1 })
 
   const eventCategories = [
